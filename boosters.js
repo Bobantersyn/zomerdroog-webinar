@@ -158,3 +158,49 @@ document.addEventListener("DOMContentLoaded", () => {
     
     setTimeout(showRandomRealSignup, 15000); 
 });
+
+// --- URGENCY COUNTDOWN TIMER ---
+const initCountdown = () => {
+    const clockElement = document.getElementById('countdown-clock');
+    if (!clockElement) return;
+
+    // Target datum: 7 Mei 2026, 19:00:00 (NL Tijd)
+    const targetDate = new Date('2026-05-07T19:00:00+02:00').getTime();
+
+    const updateTimer = () => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const f = (n) => n.toString().padStart(2, '0');
+        const render = (d, h, m, s) => `
+            <div class="sleek-segment"><span class="sleek-val">${f(d)}</span><span class="sleek-lab">DAYS</span></div>
+            <div class="sleek-sep">:</div>
+            <div class="sleek-segment"><span class="sleek-val">${f(h)}</span><span class="sleek-lab">HOURS</span></div>
+            <div class="sleek-sep">:</div>
+            <div class="sleek-segment"><span class="sleek-val">${f(m)}</span><span class="sleek-lab">MINUTES</span></div>
+            <div class="sleek-sep">:</div>
+            <div class="sleek-segment"><span class="sleek-val">${f(s)}</span><span class="sleek-lab">SECONDS</span></div>
+        `;
+
+        if (distance < 0) {
+            clockElement.innerHTML = render(0,0,0,0);
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        clockElement.innerHTML = render(days, hours, minutes, seconds);
+    };
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCountdown);
+} else {
+    initCountdown();
+}

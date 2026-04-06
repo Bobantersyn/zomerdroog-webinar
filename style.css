@@ -427,30 +427,212 @@ section {
 
 .wall-col {
     position: relative;
-    width: 220px;
-    margin-left: -50px;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), z-index 0.3s;
-}
-
-.wall-col:first-child {
-    margin-left: 0;
+    width: 280px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .wall-col:hover {
-    transform: translateY(-15px) scale(1.05);
+    transform: translateY(-10px) scale(1.02);
     z-index: 10 !important;
+}
+
+/* Dual Side-by-Side View inside Wall Col */
+.wall-col.side-by-side {
+    display: flex;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 4px solid #fff;
+    background-color: var(--bg-white);
+    padding: 0;
+    height: 100%;
+}
+
+.wall-col.side-by-side .split-image {
+    width: 50%;
+    position: relative;
+    display: flex;
+    min-height: 280px;
+    overflow: hidden;
+}
+
+.wall-col.side-by-side .split-image.before {
+    border-right: 2px solid #fff;
+}
+
+.wall-col.side-by-side .split {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0%; /* Zorgt dat hoofden zichtbaar blijven */
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    transition: all 0.4s ease;
+}
+
+.wall-col.side-by-side:hover .split {
+    width: 105%;
+    height: 105%;
+    left: -2.5%;
+}
+
+/* Bulletproof absolute sizing alignment (bypasses Safari bug) */
+.align-emre {
+    width: 115% !important;
+    height: 115% !important;
+    top: 0 !important;
+    left: -7.5% !important;
+    transform: none !important;
+}
+.wall-col.side-by-side:hover .align-emre {
+    width: 120% !important;
+    height: 120% !important;
+    left: -10% !important;
+}
+
+.align-goksan {
+    width: 112% !important;
+    height: 112% !important;
+    top: 0 !important;
+    left: -6% !important;
+    transform: none !important;
+}
+.wall-col.side-by-side:hover .align-goksan {
+    width: 117% !important;
+    height: 117% !important;
+    left: -8.5% !important;
+}
+
+.align-niels {
+    width: 130% !important;
+    height: 130% !important;
+    top: 0 !important;
+    left: -15% !important;
+    transform: none !important;
+}
+.wall-col.side-by-side:hover .align-niels {
+    width: 135% !important;
+    height: 135% !important;
+    left: -17.5% !important;
+}
+
+.align-jason {
+    width: 125% !important;
+    height: 125% !important;
+    top: 0 !important;
+    left: -12.5% !important;
+    transform: none !important;
+}
+.wall-col.side-by-side:hover .align-jason {
+    width: 130% !important;
+    height: 130% !important;
+    left: -15% !important;
+}
+
+.img-label {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(17, 32, 33, 0.85);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .wall-img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     aspect-ratio: 1 / 1;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
     border: 4px solid #fff;
     display: block;
-    background-color: #000;
+    background-color: #f8fafc;
+}
+
+/* Review Cards in Wall Grid */
+.review-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    border: 4px solid #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    height: 100%;
+    min-height: 280px;
+}
+
+.review-card .stars {
+    color: #FBBF24;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.review-card .review-text {
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.review-author img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent-cyan);
+}
+
+.review-author .author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-info strong {
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    line-height: 1.2;
+}
+
+.author-info span {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+
+@media (max-width: 768px) {
+    .wall-col {
+        width: 45%;
+        margin-left: 0;
+    }
+    .wall-grid {
+        margin-top: 30px;
+        gap: 15px;
+    }
 }
 
 .mt-large {
@@ -1124,5 +1306,70 @@ section {
 
     .step-card {
         padding: 25px 20px;
+    }
+}
+
+/* Sleek Gradient Timer */
+.sleek-timer-container {
+    display: inline-block;
+    background: linear-gradient(135deg, #38bdf8 0%, #14b8a6 100%);
+    padding: 15px 40px;
+    border-radius: var(--radius-large);
+    box-shadow: 0 10px 30px rgba(20, 184, 166, 0.25);
+}
+
+.sleek-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    color: #ffffff;
+}
+
+.sleek-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 65px;
+}
+
+.sleek-val {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    letter-spacing: 1px;
+}
+
+.sleek-lab {
+    font-size: 0.70rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.85;
+    margin-top: 8px;
+}
+
+.sleek-sep {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: -20px;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .sleek-timer-container {
+        padding: 15px 25px;
+    }
+    .sleek-segment {
+        min-width: 50px;
+    }
+    .sleek-val {
+        font-size: 2.2rem;
+    }
+    .sleek-sep {
+        font-size: 1.5rem;
+        margin-top: -15px;
     }
 }
