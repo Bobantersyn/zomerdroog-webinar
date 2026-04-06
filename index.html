@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zomer Droog Challenge | Live op 2 april</title>
+    <title>Zomer Droog Challenge | Live op 7 mei</title>
     <!-- Google Fonts for modern looks -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://zomerdroog-webinar.vercel.app/style.css">
+    <link rel="stylesheet" href="./style.css">
 
     <!-- Meta Pixel Code -->
     <script>
@@ -35,11 +35,16 @@
     <section class="hero">
         <div class="container hero-content">
             <div class="hero-text">
-                <div class="badge"><i class="fa-regular fa-calendar"></i> Live call op 2 april om 19:00</div>
+                <div class="badge"><i class="fa-regular fa-calendar"></i> Live call op 7 mei om 19:00</div>
                 <h1 class="headline">Zomer Droog <br><span class="accent">Challenge</span></h1>
-                <h2 class="subheadline">10 dagen challenge om 2 tot 4 kilo af te vallen</h2>
-                <p class="extra-text">Ontdek hoe je slimmer vet verliest, zonder extreme diëten en zonder je sociale leven op te geven.</p>
-                <a href="#cta" class="btn btn-primary">Schrijf je nu gratis in <i class="fa-solid fa-arrow-right"></i></a>
+                <h2 class="subheadline">Verlies 2 tot 4 kilo in slechts 10 dagen en loop deze zomer weer met trots en vol zelfvertrouwen over het strand.</h2>
+                <div class="hero-bullets">
+                    <p><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Hoe je vet verliest zonder uren in de sportschool te staan.</p>
+                    <p><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Wat je precies moet eten (zonder een streng dieet).</p>
+                    <p><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Een haalbaar plan, óók als je een druk sociaal leven hebt.</p>
+                </div>
+                <a href="#cta" class="btn btn-primary">👉 Ja, ik wil droog worden (Gratis Inschrijven)</a>
+                <p class="fud-text text-sm mt-2 opacity-80" style="font-size: 0.85em; margin-top: 10px;">🔒 100% Gratis &bull; Geen verplichtingen &bull; Beperkte plekken</p>
             </div>
             <div class="hero-image">
                 <div class="image-wrapper">
@@ -124,7 +129,7 @@
     <!-- 5. Afsluitende CTA sectie -->
     <section id="cta" class="final-cta-section">
         <div class="container text-center cta-wrapper">
-            <h2 class="section-title text-white">Deze live call wil je <span class="accent">niet missen</span></h2>
+            <h2 class="section-title text-white">Klaar om jouw droomlichaam te bouwen voor deze <span class="accent">zomer?</span></h2>
             <p class="cta-subtitle">De zomer komt eraan. <br>Dit is het moment om te leren hoe je op een slimme en haalbare manier vet verliest.</p>
             
             <form class="optin-form" action="https://defitnesscoach.activehosted.com/proc.php" method="POST" id="_form_8_">
@@ -147,7 +152,7 @@
                     <input type="tel" id="phone" name="phone" placeholder="Bijv. 06-12345678" required>
                 </div>
                 <button type="submit" id="_form_8_submit" class="btn btn-primary btn-large cta-btn">
-                    Reserveer nu mijn plek <i class="fa-solid fa-lock" style="font-size: 0.9em; margin-left: 5px;"></i>
+                    Reserveer nu mijn gratis plek <i class="fa-solid fa-arrow-right" style="font-size: 0.9em; margin-left: 5px;"></i>
                 </button>
             </form>
             <p class="secure-text"><i class="fa-solid fa-shield-halved"></i> 100% veilig & spamvrij. Je kunt je altijd afmelden.</p>
@@ -166,38 +171,91 @@
         </div>
     </footer>
 
-    <!-- Success Modal (Hidden by default) -->
-    <div id="success-modal" class="modal-overlay hidden">
+    <!-- Post-optin Success Modal (Fullscreen) -->
+    <div id="success-modal" class="modal-overlay hidden fullscreen-modal">
         <div class="modal-content">
-            <div class="modal-handle"></div>
-            <div class="modal-body">
-                <div class="success-icon">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <h3 class="modal-title">Je bent aangemeld!</h3>
-                <p class="modal-text">Bedankt voor je inschrijving voor de <span class="accent">Zomer Droog Challenge</span> live call. We hebben een bevestiging naar je mail gestuurd.</p>
+            <button class="close-modal-btn" onclick="document.getElementById('success-modal').classList.add('hidden');">&times;</button>
+            
+            <div class="modal-header">
+                <h2 class="modal-title">Bedankt! Nog <span class="accent">3 korte stappen</span> om je plek te claimen.</h2>
+                <p class="modal-subtitle">Voer deze stappen nu direct uit zodat je niets mist (en download onderaan je gratis e-books).</p>
+            </div>
+
+            <div class="modal-body steps-container">
                 
-                <div class="event-details">
-                    <i class="fa-regular fa-calendar"></i>
-                    <h4>Datum: 2 april om 19:00</h4>
+                <!-- Video placeholder -->
+                <div class="step-card video-card">
+                    <div class="video-placeholder">
+                        <i class="fa-solid fa-play"></i>
+                        <p>Zet hier binnenkort jouw videoboodschap</p>
+                    </div>
+                </div>
+
+                <!-- STAP 1: Agenda -->
+                <div class="step-card">
+                    <div class="step-badge">STAP 1</div>
+                    <h3>Zet het direct in je agenda</h3>
+                    <p>Zorg dat je op tijd aanwezig bent want vol = vol. Dinsdag 7 mei om 19:00.</p>
+                    <div class="calendar-buttons">
+                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Zomer+Droog+Challenge+Live+Call&dates=20260507T170000Z/20260507T183000Z" target="_blank" class="cal-btn"><i class="fa-brands fa-google"></i> Google</a>
+                        <a href="#" class="cal-btn"><i class="fa-brands fa-apple"></i> Apple</a>
+                        <a href="#" class="cal-btn"><i class="fa-brands fa-windows"></i> Outlook</a>
+                    </div>
+                </div>
+
+                <!-- STAP 2: Instagram -->
+                <div class="step-card instagram-card">
+                    <div class="step-badge">STAP 2</div>
+                    <div class="card-icon"><i class="fa-brands fa-instagram"></i></div>
+                    <h3>Stuur me "IK DOE MEE" op Insta</h3>
+                    <p>Volg me op Instagram en stuur een DM. Dan weet ik zeker dat je komt en we alvast contact hebben.</p>
+                    <a href="https://instagram.com/defitnesscoach" target="_blank" class="btn btn-green">👉 Ga naar Instagram</a>
+                </div>
+
+                <!-- STAP 3: WhatsApp -->
+                <div class="step-card whatsapp-card">
+                    <div class="step-badge">STAP 3</div>
+                    <div class="card-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                    <h3>Join de Zomerdroog WhatsApp Groep</h3>
+                    <p>Hier deel ik extra informatie, waardevolle tips en praktische inzichten, zodat je goed voorbereid bent voor de live call en alvast een voorproefje krijgt van wat je kunt verwachten.</p>
+                    <a href="#" target="_blank" class="btn btn-green">👉 Join WhatsApp Groep</a>
                 </div>
                 
-                <div class="modal-actions" style="display: flex; flex-direction: column; gap: 10px;">
-                    <a href="https://drive.google.com/file/d/1K5x4DWn4Qihg7B-xqx1PMeYSisq738tC/view?usp=sharing" target="_blank" class="btn btn-primary btn-large" style="text-decoration: none;">
-                        <i class="fa-solid fa-download"></i> Download E-book Calorieën
-                    </a>
-                    <a href="https://drive.google.com/file/d/14U29TRbqBVb4XexBjM0NOZjlxM68Uzs-/view?usp=sharing" target="_blank" class="btn btn-primary btn-large" style="text-decoration: none;">
-                        <i class="fa-solid fa-download"></i> Download E-book De Formule
-                    </a>
-                    <button class="btn btn-secondary btn-large" style="margin-top: 5px;" onclick="document.getElementById('success-modal').classList.add('hidden');">
-                        Terug naar website
+                <!-- Bonus Downloads -->
+                <div class="bonus-downloads" style="margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 30px; text-align: center;">
+                    <h3 style="color: var(--primary-dark); margin-bottom: 15px; font-size: 1.3rem;">Jouw gratis e-books:</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <a href="https://drive.google.com/file/d/1K5x4DWn4Qihg7B-xqx1PMeYSisq738tC/view?usp=sharing" target="_blank" class="btn btn-primary" style="padding: 14px 24px; font-size: 1rem;"><i class="fa-solid fa-download"></i> E-book Calorieën</a>
+                        <a href="https://drive.google.com/file/d/14U29TRbqBVb4XexBjM0NOZjlxM68Uzs-/view?usp=sharing" target="_blank" class="btn btn-primary" style="padding: 14px 24px; font-size: 1rem;"><i class="fa-solid fa-download"></i> E-book De Formule</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Exit Intent Modal -->
+    <div id="exit-intent-modal" class="modal-overlay hidden" style="justify-content: center; align-items: center; padding: 20px;">
+        <div class="modal-content" style="max-width: 550px; border-radius: 16px; margin: 0; transform: translateY(0);">
+            <div class="modal-body" style="padding-top: 30px; position: relative;">
+                <button onclick="closeExitIntent()" style="position: absolute; right: 20px; top: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #94a3b8; transition: color 0.3s;" onmouseover="this.style.color='#1e2a31'" onmouseout="this.style.color='#94a3b8'">&times;</button>
+                <div class="success-icon" style="background-color: rgba(255, 60, 60, 0.1); color: #ff3c3c; width: 70px; height: 70px; font-size: 32px; margin-bottom: 20px;">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <h3 class="modal-title" style="font-size: 2rem;">Wacht even! Voordat je gaat...</h3>
+                <p class="modal-text" style="font-size: 1.15rem; margin-bottom: 25px;">Je staat op het punt om een flinke transformatie voor deze zomer te missen. Reserveer nu alsnog je <span class="accent">gratis plek</span> en begin met resultaat boeken.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary btn-large" style="width: 100%; box-shadow: 0 8px 24px -6px rgba(67, 216, 229, 0.5);" onclick="closeExitIntent(); document.getElementById('_form_8_submit').scrollIntoView({behavior: 'smooth'})">
+                        👉 Ja, ik wil me inschrijven!
                     </button>
+                    <a href="javascript:void(0)" onclick="closeExitIntent()" style="display: block; margin-top: 15px; color: var(--text-muted); text-decoration: underline; font-size: 0.95rem; text-align: center;">Nee bedankt, ik sla over</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Form Integration Script -->
-    <script src="https://zomerdroog-webinar.vercel.app/form.js"></script>
+    <!-- Scripts -->
+    <script src="./form.js"></script>
+    <script type="module" src="./boosters.js"></script>
 </body>
 </html>
