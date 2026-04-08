@@ -309,9 +309,9 @@
                     <h3>Zet het direct in je agenda</h3>
                     <p>Zorg dat je op tijd aanwezig bent want vol = vol. Dinsdag 7 mei om 19:00.</p>
                     <div class="calendar-buttons">
-                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Zomer+Droog+Challenge+Live+Call&dates=20260507T170000Z/20260507T183000Z" target="_blank" class="cal-btn"><i class="fa-brands fa-google"></i> Google</a>
-                        <a href="#" class="cal-btn"><i class="fa-brands fa-apple"></i> Apple</a>
-                        <a href="#" class="cal-btn"><i class="fa-brands fa-windows"></i> Outlook</a>
+                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Zomer+Droog+Live+Call&dates=20260507T170000Z/20260507T183000Z&details=De+Zomer+Droog+Live+Call+gaat+beginnen!+Klik+op+de+Zoom-link+om+in+te+loggen.%0A%0AZoom-Link%3A%0Ahttps%3A%2F%2Fus06web.zoom.us%2Fj%2F85944847617%3Fpwd%3Dn29tqgEjr8IzfTkz8Zay91O4bbTJte.1&location=Zoom" target="_blank" class="cal-btn"><i class="fa-brands fa-google"></i> Google</a>
+                        <a href="#" onclick="downloadICS(event)" class="cal-btn"><i class="fa-brands fa-apple"></i> Apple</a>
+                        <a href="https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&subject=Zomer+Droog+Live+Call&startdt=2026-05-07T17:00:00Z&enddt=2026-05-07T18:30:00Z&body=De+Zomer+Droog+Live+Call+gaat+beginnen!+Klik+op+de+Zoom-link+om+in+te+loggen.%3Cbr%3E%3Cbr%3EZoom-Link%3A%3Cbr%3Ehttps%3A%2F%2Fus06web.zoom.us%2Fj%2F85944847617%3Fpwd%3Dn29tqgEjr8IzfTkz8Zay91O4bbTJte.1&location=Zoom" target="_blank" class="cal-btn"><i class="fa-brands fa-windows"></i> Outlook</a>
                     </div>
                 </div>
 
@@ -367,6 +367,34 @@
     </div>
 
     <!-- Scripts -->
+    <script>
+        function downloadICS(e) {
+            e.preventDefault();
+            const icsData = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//De Fitnesscoach//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:${new Date().getTime()}@defitnesscoach.nl
+DTSTAMP:20260408T000000Z
+DTSTART:20260507T170000Z
+DTEND:20260507T183000Z
+SUMMARY:Zomer Droog Live Call
+DESCRIPTION:De Zomer Droog Live Call gaat beginnen! Klik op de Zoom-link om in te loggen.\\n\\nZoom Link:\\nhttps://us06web.zoom.us/j/85944847617?pwd=n29tqgEjr8IzfTkz8Zay91O4bbTJte.1
+LOCATION:Zoom
+END:VEVENT
+END:VCALENDAR`;
+
+            const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'live-call-fitnesscoach.ics';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    </script>
     <script src="./form.js"></script>
     <script type="module" src="./boosters.js"></script>
 </body>
