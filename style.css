@@ -1360,16 +1360,38 @@ section {
 
 @media (max-width: 768px) {
     .sleek-timer-container {
-        padding: 15px 25px;
+        padding: 10px 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .sleek-timer {
+        gap: 6px;
     }
     .sleek-segment {
-        min-width: 50px;
+        min-width: 38px;
     }
     .sleek-val {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
+    }
+    .sleek-lab {
+        font-size: 0.55rem;
+        letter-spacing: 0.5px;
+        margin-top: 4px;
     }
     .sleek-sep {
         font-size: 1.5rem;
-        margin-top: -15px;
+        margin-top: -12px;
+    }
+
+    /* Edge-To-Edge Side-By-Side Photos on mobile */
+    .wall-col.side-by-side {
+        margin-left: -20px;
+        margin-right: -20px;
+        border-radius: 0;
+        height: auto;
+        border: none;
+    }
+    .split-image {
+        aspect-ratio: 4 / 5;
     }
 }
