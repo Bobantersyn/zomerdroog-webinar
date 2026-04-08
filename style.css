@@ -1385,11 +1385,17 @@ section {
 
     /* Edge-To-Edge Side-By-Side Photos on mobile */
     .wall-col.side-by-side {
+        width: 100vw !important;
+        max-width: 100vw !important;
         margin-left: -20px;
         margin-right: -20px;
         border-radius: 0;
         height: auto;
         border: none;
+    }
+    .wall-col.review-card {
+        width: 100% !important;
+        max-width: 100% !important;
     }
     .split-image {
         aspect-ratio: 4 / 5;
