@@ -185,3 +185,19 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
   - `index.html`: Een hidden `<iframe name="hidden_iframe">` toegevoegd direct na `<body>` (rond regel 72). Alle 3 de inschrijfformulieren hebben nu `class="optin-form"` gekregen. De code voor de pop-up zelf staat in `index.html` als `<div id="success-modal">` (vanaf regel 377).
   - `form.js`: Volledig herschreven (regels 1-65). Target nu alle `.optin-form`s, voegt `target="hidden_iframe"` toe aan de form-submit, en gebruikt een `iframe.onload` event om de `<div id="success-modal">` lokaal open te klappen (en het `fbq('track', 'Lead')` event te vuren).
 - **Notes voor opvolger (Claude):** Dit is een kogelvrije workaround voor ActiveCampaign's CORS en redirect-gedrag. Zorg dat je de `name="hidden_iframe"` niet verwijdert, anders breekt de modal-trigger.
+
+### Entry 11
+- **ID:** 11
+- **Start:** 2026-04-28 21:20
+- **AI:** Antigravity (Gemini 3.1 Pro)
+- **Type:** bugfix
+- **Onderdeel:** Opt-in flow & Success Modal (Ontbrekende HTML)
+- **Bestand(en):** `index.html`
+- **Briefing:** Herstel de `<div id="success-modal">` HTML en `<script src="form.js"></script>` in `index.html`.
+- **Aanleiding:** Claude ontdekte dat de success-modal HTML destijds per ongeluk uit de main branch was overschreven/verwijderd en de `form.js` nergens gekoppeld zat.
+- **Doel:** De popup weer zichtbaar maken en de javascript daadwerkelijk inladen.
+- **Status:** voltooid
+- **Resultaat:** 
+  - De originele HTML van het success-modal (met 3 stappen: Agenda, Instagram, WhatsApp) is succesvol hersteld uit git commit `a10f8df` en onderaan `index.html` geplaatst (vlak voor `</body>`).
+  - `<script src="./form.js"></script>` is teruggeplaatst zodat de onzichtbare iframe code daadwerkelijk wordt gedraaid.
+  - Vercel deploy is ververst. De flow is nu 100% kloppend met de beschrijving in Entry 10.

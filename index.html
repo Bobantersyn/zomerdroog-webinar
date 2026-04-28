@@ -436,5 +436,70 @@
             document.getElementById('cd-secs').innerText = seconds.toString().padStart(2, '0');
         }, 1000);
     </script>
+    <!-- Success Modal (Post-Optin 3 Steps) -->
+    <div id="success-modal" class="modal-overlay hidden fullscreen-modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="document.getElementById('success-modal').classList.add('hidden');">&times;</button>
+            
+            <div class="modal-header">
+                <h2 class="modal-title">Bedankt! Nog <span class="accent">3 korte stappen</span> om je plek te claimen.</h2>
+                <p class="modal-subtitle">Voer deze stappen nu direct uit zodat je niets mist (en download onderaan je gratis e-books).</p>
+            </div>
+
+            <div class="modal-body steps-container">
+                
+                <!-- Video placeholder -->
+                <div class="step-card video-card">
+                    <div class="video-placeholder">
+                        <i class="fa-solid fa-play"></i>
+                        <p>Zet hier binnenkort jouw videoboodschap</p>
+                    </div>
+                </div>
+
+                <!-- STAP 1: Agenda -->
+                <div class="step-card">
+                    <div class="step-badge">STAP 1</div>
+                    <h3>Zet het direct in je agenda</h3>
+                    <p>Zorg dat je op tijd aanwezig bent want vol = vol. Donderdag 7 mei 2026 om 19:00.</p>
+                    <div class="calendar-buttons">
+                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Zomer+Droog+Challenge+Live+Call&dates=20260507T170000Z/20260507T183000Z" target="_blank" class="cal-btn"><i class="fa-brands fa-google"></i> Google</a>
+                        <a href="#" class="cal-btn"><i class="fa-brands fa-apple"></i> Apple</a>
+                        <a href="#" class="cal-btn"><i class="fa-brands fa-windows"></i> Outlook</a>
+                    </div>
+                </div>
+
+                <!-- STAP 2: Instagram -->
+                <div class="step-card instagram-card">
+                    <div class="step-badge">STAP 2</div>
+                    <div class="card-icon"><i class="fa-brands fa-instagram"></i></div>
+                    <h3>Stuur me "IK DOE MEE" op Insta</h3>
+                    <p>Volg me op Instagram en stuur een DM. Dan weet ik zeker dat je komt en we alvast contact hebben.</p>
+                    <a href="https://www.instagram.com/_ertugrulcan?igsh=MTl5aTlqZWF6eW1hNQ==" target="_blank" class="btn btn-green">👉 Ga naar Instagram</a>
+                </div>
+
+                <!-- STAP 3: WhatsApp -->
+                <div class="step-card whatsapp-card">
+                    <div class="step-badge">STAP 3</div>
+                    <div class="card-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                    <h3>Join de Zomerdroog WhatsApp Groep</h3>
+                    <p>Hier deel ik extra informatie, waardevolle tips en praktische inzichten, zodat je goed voorbereid bent voor de live call en alvast een voorproefje krijgt van wat je kunt verwachten.</p>
+                    <a href="https://chat.whatsapp.com/GjQJt1yO2m16lq2H1R9m4I" target="_blank" class="btn btn-green">👉 Join WhatsApp Groep</a>
+                </div>
+                
+                <!-- Bonus Downloads -->
+                <div class="bonus-downloads" style="margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 30px; text-align: center;">
+                    <h3 style="color: var(--primary-dark); margin-bottom: 15px; font-size: 1.3rem;">Jouw gratis e-books:</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <a href="https://drive.google.com/file/d/1K5x4DWn4Qihg7B-xqx1PMeYSisq738tC/view?usp=sharing" target="_blank" class="btn btn-primary" style="padding: 14px 24px; font-size: 1rem;"><i class="fa-solid fa-download"></i> E-book Calorieën</a>
+                        <a href="https://drive.google.com/file/d/14U29TRbqBVb4XexBjM0NOZjlxM68Uzs-/view?usp=sharing" target="_blank" class="btn btn-primary" style="padding: 14px 24px; font-size: 1rem;"><i class="fa-solid fa-download"></i> E-book De Formule</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./form.js"></script>
 </body>
 </html>
