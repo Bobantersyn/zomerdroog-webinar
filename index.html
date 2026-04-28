@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zomer Droog Challenge | Live op 7 mei</title>
-    <!-- Google Fonts for modern looks -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome for icons -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://zomerdroog-webinar.vercel.app/style.css?v=1.0.2">
+    <link rel="stylesheet" href="https://zomerdroog-webinar.vercel.app/style.css?v=2.0.0">
 
     <!-- Meta Pixel Code -->
     <script>
@@ -22,29 +22,99 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
+    // We send Variant A to facebook to track for the future tool
     fbq('init', '1420714789305158');
-    fbq('track', 'PageView');
+    fbq('track', 'PageView', { variant: 'A' });
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1420714789305158&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .section-white { background-color: #ffffff !important; }
+        .section-gray { background-color: #f8fafc !important; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .section-title { text-align: center; color: #1e293b; font-weight: 800; }
+        
+        .vantafit-card {
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            text-align: left;
+        }
+
+        .countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .countdown-box { background: #1e293b; color: white; padding: 15px 20px; border-radius: 12px; min-width: 80px; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .countdown-number { font-size: 2.2rem; font-weight: 800; line-height: 1; }
+        .countdown-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; display: block; margin-top: 5px; font-weight: 600; }
+
+        .pas-section { background-color: var(--bg-light); padding: 80px 0; }
+        .pas-content { max-width: 800px; margin: 0 auto; text-align: center;}
+        .pas-content p { font-size: 1.2rem; margin-bottom: 20px; text-align: left;}
+        .pas-highlight { background: #f1f5f9; border-radius: 16px; padding: 30px; margin: 40px 0; font-weight: 600; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        
+        .sticky-mobile-cta { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #ffffff; padding: 15px; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); z-index: 900; }
+        @media (max-width: 768px) { .sticky-mobile-cta { display: block; } .about-container { flex-direction: column; } .vantafit-card { padding: 25px; } }
+
+        .popup-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+        .popup-modal.show { display: flex; opacity: 1; }
+        .popup-content { background: #fff; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; position: relative; transform: scale(0.9); transition: transform 0.3s; }
+        .popup-modal.show .popup-content { transform: scale(1); }
+        .close-popup { position: absolute; top: 15px; right: 20px; font-size: 24px; background: none; border: none; cursor: pointer; color: #94a3b8; }
+        .close-popup:hover { color: #1e2a31; }
+    </style>
 </head>
 <body>
+    <!-- Hidden iframe for silent form submissions -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+    <!-- Popup Form (Triggers from Hero & Mobile Sticky) -->
+    <div id="enroll-modal" class="popup-modal">
+        <div class="popup-content text-center">
+            <button class="close-popup" onclick="closeEnrollModal()">&times;</button>
+            <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Reserveer gratis je plek</h3>
+            <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 25px;">Laat hieronder je naam en e-mail achter om direct je plek te bemachtigen.</p>
+            
+            <form class="optin-form" action="https://defitnesscoach.activehosted.com/proc.php" method="POST">
+                <input type="hidden" name="u" value="8" />
+                <input type="hidden" name="f" value="8" />
+                <input type="hidden" name="s" />
+                <input type="hidden" name="c" value="0" />
+                <input type="hidden" name="m" value="0" />
+                <input type="hidden" name="act" value="sub" />
+                <input type="hidden" name="v" value="2" />
+                <input type="hidden" name="or" value="9a091e8d-ec0c-4a19-a2ee-9b3ac3ea4986" />
+                
+                <div class="form-group">
+                    <input type="text" name="firstname" placeholder="Voornaam" required style="width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <input type="email" name="email" placeholder="E-mailadres" required style="width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem;">
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <input type="tel" name="phone" placeholder="Telefoonnummer" required pattern="[0-9+\s\-()]{8,}" style="width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem;">
+                </div>
+                <button type="submit" class="btn btn-primary btn-large cta-btn" style="width: 100%; margin-top: 15px;">
+                    Ja, ik wil gratis meedoen
+                </button>
+            </form>
+            <p style="font-size: 0.85rem; margin-top: 15px; color: var(--text-muted);">100% gratis &bull; Inclusief bonussen &bull; Beperkte plekken</p>
+        </div>
+    </div>
+
     <!-- 1. Hero -->
     <section class="hero">
         <div class="container hero-content">
             <div class="hero-text">
-                <div class="badge"><i class="fa-regular fa-calendar"></i> Live call op 7 mei om 19:00</div>
-                <h1 class="headline">Zomer Droog <br><span class="accent">Challenge</span></h1>
-                <h2 class="subheadline">Verlies 2 tot 4 kilo in slechts 10 dagen en loop deze zomer weer met trots en vol zelfvertrouwen over het strand.</h2>
-                <div class="hero-bullets">
-                    <p><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Hoe je vet verliest zonder uren in de sportschool te staan.</p>
-                    <p><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Wat je precies moet eten (zonder een streng dieet).</p>
-                    <p><i class="fa-solid fa-check" style="color: #4CAF50;"></i> Een haalbaar plan, óók als je een druk sociaal leven hebt.</p>
-                </div>
-                <a href="#cta" class="btn btn-primary">👉 Ja, ik wil droog worden (Gratis Inschrijven)</a>
-                <p class="fud-text text-sm mt-2 opacity-80" style="font-size: 0.85em; margin-top: 10px;">🔒 100% Gratis &bull; Geen verplichtingen &bull; Beperkte plekken</p>
+                <div class="badge"><i class="fa-regular fa-calendar"></i> Donderdag 7 mei 2026 &bull; 19:00 &bull; 60 min</div>
+                <h1 class="headline" style="font-size: 3.5rem;">Word in 10 dagen zichtbaar droger en kijk eindelijk weer trots in de spiegel</h1>
+                <h2 class="subheadline" style="font-size: 1.2rem; font-weight: 400; line-height: 1.6;">Zonder crashdieet. Zonder uren cardio. Zonder je hele sociale leven op pauze te zetten.<br><br><strong>Ontdek in deze gratis live call</strong> hoe je snel droger wordt met een simpele aanpak die ook werkt als je een druk leven hebt, vaak uit eten gaat of eerder bent afgehaakt op strenge diëten.</h2>
+                
+                <button onclick="openEnrollModal()" class="btn btn-primary btn-large">Reserveer gratis je plek</button>
+                <p class="fud-text text-sm mt-2 opacity-80" style="font-size: 0.9em; margin-top: 12px; text-align: center;">100% gratis &bull; Geen verplichtingen &bull; Beperkte plekken &bull; Direct toepasbaar<br><br><i>Inclusief 2 gratis bonussen na aanmelding</i></p>
             </div>
             <div class="hero-image">
                 <div class="image-wrapper">
@@ -52,158 +122,131 @@
                     <div class="floating-badge top-right">
                         <i class="fa-solid fa-bolt"></i> + Energie
                     </div>
-                    <div class="floating-badge bottom-left">
-                        <i class="fa-solid fa-fire"></i> - Vet
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Urgency Timer Banner -->
-    <div style="background: var(--bg-light); padding: 40px 20px; text-align: center; border-bottom: 1px solid #e2e8f0;">
-        <div style="max-width: 800px; margin: 0 auto 15px auto;">
-            <div style="display: inline-block; background: #fee2e2; color: #e11d48; font-weight: 800; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 10px;">
-                <i class="fa-solid fa-circle" style="font-size: 0.6rem; vertical-align: middle; margin-right: 6px; animation: pulse 2s infinite;"></i> <span style="vertical-align: middle;">Live Call</span>
+    <div class="section-gray" style="padding: 50px 20px; text-align: center; position: relative; z-index: 10;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: inline-block; background: #fee2e2; color: #e11d48; font-weight: 800; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(225, 29, 72, 0.1);">
+                <i class="fa-solid fa-circle" style="font-size: 0.6rem; animation: pulse 2s infinite;"></i> Registratie sluit binnenkort
             </div>
-            <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-dark); margin: 0 0 10px 0; line-height: 1.3;">
-                Registratie voor de live call sluit op <span style="color: var(--accent-cyan);">DONDERDAG 7 MEI 19:00</span>
+            <h3 style="font-size: 1.8rem; font-weight: 800; margin: 0 0 20px 0; color: #1e293b;">
+                Start live call: <span style="color: #0ea5e9; text-decoration: underline; text-underline-offset: 4px;">DONDERDAG 7 MEI 2026 &bull; 19:00</span>
             </h3>
-        </div>
-        <div class="sleek-timer-container fade-in">
-            <div id="countdown-clock" class="sleek-timer">
-                <!-- Javascript will inject the segmented clock here -->
+            <div class="countdown-container" id="countdownBanner">
+                <div class="countdown-box"><div class="countdown-number" id="cd-days">00</div><span class="countdown-label">Dagen</span></div>
+                <div class="countdown-box"><div class="countdown-number" id="cd-hours">00</div><span class="countdown-label">Uren</span></div>
+                <div class="countdown-box"><div class="countdown-number" id="cd-mins">00</div><span class="countdown-label">Min</span></div>
+                <div class="countdown-box"><div class="countdown-number" id="cd-secs">00</div><span class="countdown-label">Sec</span></div>
             </div>
         </div>
     </div>
 
-    <!-- 1.5 Wall of Love (Resultaten) -->
-    <section class="wall-of-love-section section" style="padding-bottom: 80px;">
+    <!-- 2. Direct sociaal bewijs onder de hero -->
+    <section class="wall-of-love-section section" style="padding: 60px 0;">
         <div class="container text-center">
-            <div class="badge fade-in mx-auto" style="margin-bottom: 20px; display: inline-block;">RESULTATEN</div>
-            <h2 class="section-title">Word ons volgende succesverhaal</h2>
-            <p class="section-text" style="max-width: 600px; margin: 0 auto;">De resultaten liegen er niet om. Met de Zomer Droog methode hebben al velen hun droomlichaam bereikt in recordtijd.</p>
+            <h2 class="section-title" style="margin-bottom: 20px;">Mannen die klaar waren met aanklooien, boekten zichtbaar resultaat</h2>
 
-            <div class="wall-grid mt-large" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 25px;">
-                <!-- 1. Before/After (Emre) -->
-                <div class="wall-col side-by-side">
-                    <div class="split-image before">
-                        <img src="https://zomerdroog-webinar.vercel.app/Before afters onbewerkt/Embre before.jpg" class="wall-img split" alt="Voor">
-                        <span class="img-label">VOOR</span>
-                    </div>
-                    <div class="split-image after">
-                        <img src="https://zomerdroog-webinar.vercel.app/Before afters onbewerkt/Emre after.jpg" class="wall-img split align-emre" alt="Na">
-                        <span class="img-label">NA</span>
-                    </div>
-                </div>
-
-                <!-- 2. Before/After (Guyven) -->
-                <div class="wall-col side-by-side">
-                    <div class="split-image before">
-                        <img src="https://zomerdroog-webinar.vercel.app/Before afters onbewerkt/guyven before.jpg" class="wall-img split" alt="Voor">
-                        <span class="img-label">VOOR</span>
-                    </div>
-                    <div class="split-image after">
-                        <img src="https://zomerdroog-webinar.vercel.app/Before afters onbewerkt/guyven after.jpg" class="wall-img split" alt="Na">
-                        <span class="img-label">NA</span>
-                    </div>
-                </div>
-
-                <!-- 3. Before/After (Jason) -->
-                <div class="wall-col side-by-side">
-                    <div class="split-image before">
-                        <img src="https://zomerdroog-webinar.vercel.app/Before afters onbewerkt/Jason before.jpg" class="wall-img split" alt="Voor">
-                        <span class="img-label">VOOR</span>
-                    </div>
-                    <div class="split-image after">
-                        <img src="https://zomerdroog-webinar.vercel.app/Before afters onbewerkt/Jason after.jpg" class="wall-img split align-jason" alt="Na">
-                        <span class="img-label">NA</span>
-                    </div>
-                </div>
-            </div> <!-- End Image Grid -->
-
-            <!-- Title bridging the two sections -->
-            <h3 class="section-title" style="margin-top: 60px; margin-bottom: 10px; font-size: 1.8rem; color: var(--text-dark);">
-                Wat ze zeggen over ons
-            </h3>
-
-            <!-- Splitted Text Review Grid -->
-            <div class="wall-grid" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 25px;">
-                <!-- 4. Text Review 1 -->
-                <div class="wall-col review-card">
+            <div class="wall-grid mt-large" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; margin-top: 40px;">
+                <div class="wall-col review-card" style="min-height: 200px;">
                     <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"Van 108kg naar 96.5kg. Het heeft m'n mindset en zelfvertrouwen volledig getransformeerd. Ik train nu veel effectiever!"</p>
+                    <p class="review-text">"In de eerste 2 weken al 4 kilo eraf. Dat gaf zoveel vertrouwen dat ik ben blijven doorgaan — uiteindelijk van 108 kg naar 96,5 kg. Niet alleen fysiek verschil, ook mentaal veel sterker."</p>
                     <div class="review-author">
                         <img src="https://zomerdroog-webinar.vercel.app/Tekst Reviews/profile_1.png" alt="Klant">
-                        <div class="author-info">
-                            <strong>Muhammed</strong>
-                            <span>Deelnemer</span>
-                        </div>
+                        <div class="author-info"><strong>Muhammed</strong></div>
                     </div>
                 </div>
-
-                <!-- 5. Text Review 2 -->
-                <div class="wall-col review-card">
+                <div class="wall-col review-card" style="min-height: 200px;">
                     <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"Van ruim 100kg naar 77kg: een fysieke transformatie en zoveel meer discipline. Een echte eye-opener."</p>
+                    <p class="review-text">"De eerste 2 weken meteen 5 kilo eraf. Voor het eerst snapte ik echt wat werkt en hoe ik het volhoud — uiteindelijk van ruim 100 kg naar 77 kg."</p>
                     <div class="review-author">
                         <img src="https://zomerdroog-webinar.vercel.app/Tekst Reviews/profile_2.png" alt="Klant">
-                        <div class="author-info">
-                            <strong>Emir</strong>
-                            <span>Deelnemer</span>
-                        </div>
+                        <div class="author-info"><strong>Emir</strong></div>
                     </div>
                 </div>
-
-                <!-- 6. Text Review 3 -->
-                <div class="wall-col review-card">
+                <div class="wall-col review-card" style="min-height: 200px;">
                     <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"Ik ben maar liefst 40 kilo afgevallen en train nu consistent 4 keer per week. Een transformerende ervaring!"</p>
+                    <p class="review-text">"In de eerste 2 weken al ruim 3 kilo kwijt. Daarna gewoon doorgegaan — uiteindelijk 40 kilo afgevallen en nu train ik 4 keer per week consistent. Dat had ik vroeger nooit volgehouden."</p>
                     <div class="review-author">
                         <img src="https://zomerdroog-webinar.vercel.app/Tekst Reviews/profile_3.png" alt="Klant">
-                        <div class="author-info">
-                            <strong>Ozan</strong>
-                            <span>Deelnemer</span>
-                        </div>
+                        <div class="author-info"><strong>Ozan</strong></div>
                     </div>
                 </div>
             </div>
-
+            <p style="margin-top: 30px; font-size: 0.85rem; color: #94a3b8; font-style: italic;">Individuele resultaten variëren per persoon. Geen gegarandeerd resultaat.</p>
         </div>
     </section>
 
-    <!-- 2. Wat je leert -->
+    <!-- 3. PAS-sectie (Problem, Agitation, Solution) -->
+    <section class="pas-section">
+        <div class="container pas-content">
+            <h2 class="section-title">Herkenbaar?</h2>
+            <p><strong>Je wilt droger worden voor de zomer.</strong> Je weet dat er iets moet gebeuren. Maar elke keer loopt het weer hetzelfde.</p>
+            <p>Je begint scherp. Je eet een paar dagen netjes. Je bent gemotiveerd. En daarna komt werk, familie, weekend of gewoon je oude ritme er weer tussen.</p>
+            <p>Voor je het weet ben je weer terug bij af.</p>
+            
+            <div class="pas-highlight">
+                <p style="margin: 0; color: var(--primary-dark);">Niet omdat je lui bent. Niet omdat je geen discipline hebt. Maar omdat je waarschijnlijk een aanpak volgt die te streng, te vaag of gewoon niet vol te houden is.</p>
+            </div>
+
+            <h3 style="font-size: 2rem; margin-top: 40px; margin-bottom: 20px;">En dat is frustrerend</h3>
+            <p>Want diep vanbinnen weet je dat je beter kunt dan dit.</p>
+            <p>Je wilt niet weer die zomer ingaan met het gevoel dat je je moet inhouden. Je wilt niet weer denken: volgend jaar pak ik het serieus aan. Je wilt nu resultaat zien. En je wilt een aanpak die werkt in het echte leven.</p>
+
+            <h3 style="font-size: 2rem; margin-top: 40px; margin-bottom: 20px;">Daarom geef ik deze live call</h3>
+            <p>In deze training laat ik je zien hoe je in 10 dagen al zichtbaar verschil kunt maken zonder bullshit, zonder onrealistische regels en zonder jezelf helemaal gek te maken.</p>
+        </div>
+    </section>
+
+    <!-- 4. Waardeproposities -->
     <section class="learn-section">
         <div class="container">
-            <h2 class="section-title text-center">Wat je gaat leren tijdens deze <span class="accent">live call</span></h2>
+            <h2 class="section-title text-center">Dit ga je leren tijdens de live call</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="icon-wrap"><i class="fa-solid fa-list-check"></i></div>
-                    <p>Hoe je jouw <strong>dag moet structureren</strong> om sneller resultaat te halen</p>
+                    <div class="icon-wrap"><i class="fa-solid fa-rocket"></i></div>
+                    <p><strong>Hoe je in 10 dagen snel resultaat boekt</strong> zonder jezelf uit te hongeren. Je leert direct de juiste stappen te zetten.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon-wrap"><i class="fa-solid fa-fire"></i></div>
-                    <p>Wat de <strong>beste manier</strong> is om vet te verliezen</p>
+                    <div class="icon-wrap"><i class="fa-solid fa-utensils"></i></div>
+                    <p><strong>Wat je moet eten om vet te verliezen.</strong> Geen vaag verhaal. Gewoon duidelijk wat helpt en wat je beter kunt laten.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon-wrap"><i class="fa-solid fa-people-arrows"></i></div>
-                    <p>Hoe je <strong>ondanks je sociale leven</strong> nog steeds vet kunt verliezen</p>
+                    <div class="icon-wrap"><i class="fa-solid fa-dumbbell"></i></div>
+                    <p><strong>Hoe je resultaat boekt zonder uren in de sportschool.</strong> Meer trainen is niet beter, slim trainen wel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-wrap"><i class="fa-solid fa-martini-glass-citrus"></i></div>
+                    <p><strong>Hoe je strak blijft terwijl je gewoon leeft.</strong> Dus ook met sociale afspraken, familie of buitenshuis eten.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-wrap"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <p><strong>Welke fouten bijna iedereen maakt</strong> waardoor je denkt dat je goed bezig bent, maar resultaat uitblijft.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-wrap"><i class="fa-solid fa-brain"></i></div>
+                    <p><strong>Hoe je discipline opbouwt zonder motivatie.</strong> Structuur is wat je echt vooruit helpt, niet motivatie.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. Bonus sectie -->
+    <!-- 5. Wat krijg je precies? (Bonus sectie) -->
     <section class="bonus-section">
         <div class="container bonus-container">
             <div class="bonus-text">
-                <h2 class="section-title text-white">Bonus bij je <span class="accent">inschrijving</span></h2>
-                <p class="bonus-intro">Bij je inschrijving ontvang je ook <strong>2 handige e-books:</strong></p>
-                <ul class="bonus-list">
-                    <li><div class="check-icon"><i class="fa-solid fa-check"></i></div> Calorieën</li>
-                    <li><div class="check-icon"><i class="fa-solid fa-check"></i></div> Calorieën Formule</li>
+                <h2 class="section-title text-white">Dit krijg je wanneer je je inschrijft</h2>
+                <ul class="bonus-list" style="margin-bottom: 20px;">
+                    <li style="margin-bottom: 10px; font-size: 1.1rem; padding: 15px;"><div class="check-icon"><i class="fa-solid fa-check"></i></div> Toegang tot de gratis live call van 60 minuten</li>
+                    <li style="margin-bottom: 10px; font-size: 1.1rem; padding: 15px;"><div class="check-icon"><i class="fa-solid fa-check"></i></div> Een concreet plan om in 10 dagen zichtbaar droger te worden</li>
+                    <li style="margin-bottom: 10px; font-size: 1.1rem; padding: 15px;"><div class="check-icon"><i class="fa-solid fa-check"></i></div> Praktische uitleg over voeding, structuur en vetverlies</li>
                 </ul>
-                <p class="bonus-outro">Zo heb je niet alleen motivatie, maar ook direct de juiste kennis om goed te starten.</p>
+                <h3 style="color: #fff; margin-top: 30px; margin-bottom: 15px;">Inclusief 2 extra bonussen:</h3>
+                <p style="color: #cbd5e1; font-size: 1.1rem; margin-bottom: 10px;"><strong>Bonus 1: De Calorie Cheat Sheet</strong><br>Een simpele gids waarmee je eindelijk snapt hoe calorieën werken en hoe je ze in je voordeel gebruikt.</p>
+                <p style="color: #cbd5e1; font-size: 1.1rem;"><strong>Bonus 2: De 10-Dagen Zomerdroog Blueprint</strong><br>Een praktische handleiding waarmee je sneller structuur krijgt en gerichter resultaat boekt.</p>
             </div>
             <div class="bonus-graphics">
                 <div class="ebooks-stack">
@@ -215,36 +258,53 @@
         </div>
     </section>
 
-    <!-- 4. Wie ben ik? -->
-    <section class="about-section">
-        <div class="container about-container">
-            <div class="about-image">
-                <div class="coach-photo">
-                    <div class="photo-accent"></div>
-                </div>
-            </div>
-            <div class="about-text">
-                <h2 class="section-title">Wie <span class="accent">ben ik?</span></h2>
-                <div class="accent-line"></div>
-                <p>Ik zie als coach veel van mijn Turkse broeders steeds dikker worden, vooral richting de zomer.</p>
-                <p>Dan proberen ze op het laatste moment de ene extreme afvalmethode na de andere om hun buikvet te verliezen, terwijl het helemaal niet zo moeilijk hoeft te zijn.</p>
-                <p class="strong-text"><strong>In deze live call leg ik je uit hoe dit beter kan.</strong></p>
-                <p>Geen gekke diëten, geen extreme aanpak, maar een manier die duidelijk is en werkt in het echte leven.</p>
+    <!-- 6. Doelgroep (Variant B) -->
+    <section class="audience-section section-white" style="padding: 80px 0;">
+        <div class="container audience-content" style="max-width: 800px; margin: 0 auto;">
+            <h2 class="section-title text-center" style="margin-bottom: 50px;">Deze live call is voor jou als je klaar bent met steeds opnieuw beginnen</h2>
+            <div class="vantafit-card">
+                <p style="font-size: 1.25rem; font-weight: 600; color: #334155; margin-bottom: 15px;"><i class="fa-solid fa-bullseye" style="color: #0ea5e9; margin-right: 12px; width: 20px;"></i> Je wilt droger worden.</p>
+                <p style="font-size: 1.25rem; font-weight: 600; color: #334155; margin-bottom: 15px;"><i class="fa-solid fa-bullseye" style="color: #0ea5e9; margin-right: 12px; width: 20px;"></i> Je wilt buikvet kwijt.</p>
+                <p style="font-size: 1.25rem; font-weight: 600; color: #334155; margin-bottom: 15px;"><i class="fa-solid fa-bullseye" style="color: #0ea5e9; margin-right: 12px; width: 20px;"></i> Je wilt weer grip krijgen op je discipline, voeding en routine.</p>
+                <p style="font-size: 1.15rem; margin-bottom: 35px; color: #64748b; line-height: 1.6; margin-top: 20px; padding-left: 36px;">Maar je merkt dat het lastig is om dit vol te houden in het echte leven met familie, sociale momenten en een druk schema...</p>
                 
-                <div class="highlight-box">
-                    <p>Schrijf je nu in voor deze live call die je niet wilt missen.</p>
+                <div style="border-top: 1px solid #e2e8f0; padding-top: 30px; display: flex; align-items: center; justify-content: space-between;">
+                    <h3 style="font-size: 1.5rem; color: #1e293b; margin: 0; font-weight: 800;">Dan is deze training exact voor jou gemaakt.</h3>
+                    <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 2rem;"></i>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 5. Afsluitende CTA sectie -->
+    <!-- 7. Over jou -->
+    <section class="about-section section-gray" style="padding: 100px 0;">
+        <div class="container">
+            <h2 class="section-title text-center" style="margin-bottom: 60px;">Waarom ik deze live call geef</h2>
+            <div class="about-container" style="display: flex; gap: 60px; align-items: center; justify-content: center;">
+                <div class="about-image" style="flex: 1; text-align: center; max-width: 450px;">
+                    <img src="about-coach.png" alt="Coach" style="width: 100%; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+                </div>
+                <div class="about-text" style="flex: 1; text-align: left;">
+                    <p style="font-size: 1.2rem; color: #475569; margin-bottom: 20px; line-height: 1.6;">Ik zie veel mannen die wel willen veranderen, maar vastlopen in de verkeerde aanpak.</p>
+                    <p style="font-size: 1.2rem; color: #475569; margin-bottom: 20px; line-height: 1.6;">Te streng. Te onduidelijk. Te moeilijk vol te houden. Daardoor krijg je dat patroon van beginnen, stoppen, opnieuw motivatie zoeken en weer terugvallen.</p>
+                    <p class="strong-text" style="font-size: 1.4rem; color: #1e293b; margin-bottom: 25px;"><strong>En precies daarom geef ik deze live call.</strong></p>
+                    <p style="font-size: 1.2rem; color: #475569; margin-bottom: 40px; line-height: 1.6;">Niet om je vol te gooien met theorie of een onrealistisch verhaal. Maar om je te laten zien hoe je snel resultaat kunt boeken met een aanpak die je echt kunt volhouden.</p>
+                    <div class="vantafit-card" style="background-color: #ffffff; padding: 30px; border-left: 6px solid #0ea5e9;">
+                        <p style="margin: 0; font-weight: 700; color: #0f172a; font-size: 1.2rem;">Geen gekke diëten. Geen eindeloze cardio. Geen vaag gedoe. Wel een plan dat werkt.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Onderste conversiesectie -->
     <section id="cta" class="final-cta-section">
         <div class="container text-center cta-wrapper">
-            <h2 class="section-title text-white">Klaar om jouw droomlichaam te bouwen voor deze <span class="accent">zomer?</span></h2>
-            <p class="cta-subtitle">De zomer komt eraan. <br>Dit is het moment om te leren hoe je op een slimme en haalbare manier vet verliest.</p>
+            <h2 class="section-title text-white">De zomer komt eraan. Je hebt nu 2 keuzes.</h2>
+            <p class="cta-subtitle">Je doet weer niets. Of je pakt het nu serieus aan en zorgt dat je straks wél blij bent met wat je in de spiegel ziet. Reserveer nu gratis je plek.</p>
             
-            <form class="optin-form" action="https://defitnesscoach.activehosted.com/proc.php" method="POST" id="_form_8_">
+            <form class="optin-form" action="https://defitnesscoach.activehosted.com/proc.php" method="POST">
+                <!-- ActiveCampaign hidden fields -->
                 <input type="hidden" name="u" value="8" />
                 <input type="hidden" name="f" value="8" />
                 <input type="hidden" name="s" />
@@ -255,19 +315,19 @@
                 <input type="hidden" name="or" value="9a091e8d-ec0c-4a19-a2ee-9b3ac3ea4986" />
                 
                 <div class="form-group">
-                    <input type="text" id="firstname" name="firstname" placeholder="Jouw roepnaam..." required>
+                    <input type="text" name="firstname" placeholder="Voornaam" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="email" name="email" placeholder="Jouw beste e-mailadres..." required>
+                    <input type="email" name="email" placeholder="E-mailadres" required>
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="phone" name="phone" placeholder="Bijv. 06-12345678" required>
+                    <input type="tel" name="phone" placeholder="Telefoonnummer" required pattern="[0-9+\s\-()]{8,}">
                 </div>
-                <button type="submit" id="_form_8_submit" class="btn btn-primary btn-large cta-btn">
-                    Reserveer nu mijn gratis plek <i class="fa-solid fa-arrow-right" style="font-size: 0.9em; margin-left: 5px;"></i>
+                <button type="submit" class="btn btn-primary btn-large cta-btn">
+                    Ja, ik wil gratis meedoen
                 </button>
             </form>
-            <p class="secure-text"><i class="fa-solid fa-shield-halved"></i> 100% veilig & spamvrij. Je kunt je altijd afmelden.</p>
+            <p class="secure-text text-white" style="margin-bottom: 20px;">100% gratis &bull; Inclusief bonussen &bull; Beperkte plekken</p>
         </div>
     </section>
 
@@ -276,126 +336,105 @@
             <div class="footer-content">
                 <p>&copy; 2026 De Fitnesscoach. Alle rechten voorbehouden.</p>
                 <div class="footer-links">
-                    <a href="#">Privacybeleid</a>
-                    <a href="#">Algemene Voorwaarden</a>
+                    <a href="TODO-privacybeleid-url" target="_blank" rel="noopener">Privacybeleid</a>
+                    <a href="TODO-voorwaarden-url" target="_blank" rel="noopener">Algemene Voorwaarden</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Post-optin Success Modal (Fullscreen) -->
-    <div id="success-modal" class="modal-overlay hidden fullscreen-modal">
-        <div class="modal-content">
-            <button class="close-modal-btn" onclick="document.getElementById('success-modal').classList.add('hidden');">&times;</button>
-            
-            <div class="modal-header">
-                <h2 class="modal-title">Bedankt! Nog <span class="accent">3 korte stappen</span> om je plek te claimen.</h2>
-                <p class="modal-subtitle">Voer deze stappen nu direct uit zodat je niets mist (en download onderaan je gratis e-books).</p>
-            </div>
-
-            <div class="modal-body steps-container">
-                
-                <!-- Video placeholder -->
-                <div class="step-card video-card">
-                    <div class="video-placeholder">
-                        <i class="fa-solid fa-play"></i>
-                        <p>Zet hier binnenkort jouw videoboodschap</p>
-                    </div>
-                </div>
-
-                <!-- STAP 1: Agenda -->
-                <div class="step-card">
-                    <div class="step-badge">STAP 1</div>
-                    <h3>Zet het direct in je agenda</h3>
-                    <p>Zorg dat je op tijd aanwezig bent want vol = vol. Dinsdag 7 mei om 19:00.</p>
-                    <div class="calendar-buttons">
-                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Zomer+Droog+Live+Call&dates=20260507T170000Z/20260507T183000Z&details=De+Zomer+Droog+Live+Call+gaat+beginnen!+Klik+op+de+Zoom-link+om+in+te+loggen.%0A%0AZoom-Link%3A%0Ahttps%3A%2F%2Fus06web.zoom.us%2Fj%2F85944847617%3Fpwd%3Dn29tqgEjr8IzfTkz8Zay91O4bbTJte.1&location=Zoom" target="_blank" class="cal-btn"><i class="fa-brands fa-google"></i> Google</a>
-                        <a href="#" onclick="downloadICS(event)" class="cal-btn"><i class="fa-brands fa-apple"></i> Apple</a>
-                        <a href="https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&subject=Zomer+Droog+Live+Call&startdt=2026-05-07T17:00:00Z&enddt=2026-05-07T18:30:00Z&body=De+Zomer+Droog+Live+Call+gaat+beginnen!+Klik+op+de+Zoom-link+om+in+te+loggen.%3Cbr%3E%3Cbr%3EZoom-Link%3A%3Cbr%3Ehttps%3A%2F%2Fus06web.zoom.us%2Fj%2F85944847617%3Fpwd%3Dn29tqgEjr8IzfTkz8Zay91O4bbTJte.1&location=Zoom" target="_blank" class="cal-btn"><i class="fa-brands fa-windows"></i> Outlook</a>
-                    </div>
-                </div>
-
-                <!-- STAP 2: Instagram -->
-                <div class="step-card instagram-card">
-                    <div class="step-badge">STAP 2</div>
-                    <div class="card-icon"><i class="fa-brands fa-instagram"></i></div>
-                    <h3>Stuur me "IK DOE MEE" op Insta</h3>
-                    <p>Volg me op Instagram en stuur een DM. Dan weet ik zeker dat je komt en we alvast contact hebben.</p>
-                    <a href="https://www.instagram.com/_ertugrulcan?igsh=MTl5aTlqZWF6eW1hNQ==" target="_blank" class="btn btn-green">👉 Ga naar Instagram</a>
-                </div>
-
-                <!-- STAP 3: WhatsApp -->
-                <div class="step-card whatsapp-card">
-                    <div class="step-badge">STAP 3</div>
-                    <div class="card-icon"><i class="fa-brands fa-whatsapp"></i></div>
-                    <h3>Join de Zomerdroog WhatsApp Groep</h3>
-                    <p>Hier deel ik extra informatie, waardevolle tips en praktische inzichten, zodat je goed voorbereid bent voor de live call en alvast een voorproefje krijgt van wat je kunt verwachten.</p>
-                    <a href="https://chat.whatsapp.com/DRc4afxdYngApX5UTdddQJ" target="_blank" class="btn btn-green">👉 Join WhatsApp Groep</a>
-                </div>
-                
-                <!-- Bonus Downloads -->
-                <div class="bonus-downloads" style="margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 30px; text-align: center;">
-                    <h3 style="color: var(--primary-dark); margin-bottom: 15px; font-size: 1.3rem;">Jouw gratis e-books:</h3>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <a href="https://drive.google.com/file/d/1K5x4DWn4Qihg7B-xqx1PMeYSisq738tC/view?usp=sharing" target="_blank" class="btn btn-primary" style="padding: 14px 24px; font-size: 1rem;"><i class="fa-solid fa-download"></i> E-book Calorieën</a>
-                        <a href="https://drive.google.com/file/d/14U29TRbqBVb4XexBjM0NOZjlxM68Uzs-/view?usp=sharing" target="_blank" class="btn btn-primary" style="padding: 14px 24px; font-size: 1rem;"><i class="fa-solid fa-download"></i> E-book De Formule</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Exit Intent Modal -->
+    <!-- EXIT INTENT MODAL MET DIRECT INSCHRIJVEN -->
     <div id="exit-intent-modal" class="modal-overlay hidden" style="justify-content: center; align-items: center; padding: 20px;">
         <div class="modal-content" style="max-width: 550px; border-radius: 16px; margin: 0; transform: translateY(0);">
             <div class="modal-body" style="padding-top: 30px; position: relative;">
                 <button onclick="closeExitIntent()" style="position: absolute; right: 20px; top: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #94a3b8; transition: color 0.3s;" onmouseover="this.style.color='#1e2a31'" onmouseout="this.style.color='#94a3b8'">&times;</button>
-                <div class="success-icon" style="background-color: rgba(255, 60, 60, 0.1); color: #ff3c3c; width: 70px; height: 70px; font-size: 32px; margin-bottom: 20px;">
+                <div class="success-icon" style="background-color: rgba(255, 60, 60, 0.1); color: #ff3c3c; width: 70px; height: 70px; font-size: 32px; margin-bottom: 10px;">
                     <i class="fa-solid fa-gift"></i>
                 </div>
-                <h3 class="modal-title" style="font-size: 2rem;">Wacht even! Voordat je gaat...</h3>
-                <p class="modal-text" style="font-size: 1.15rem; margin-bottom: 25px;">Je staat op het punt om een flinke transformatie voor deze zomer te missen. Reserveer nu alsnog je <span class="accent">gratis plek</span> en begin met resultaat boeken.</p>
-                <div class="modal-actions">
-                    <button class="btn btn-primary btn-large" style="width: 100%; box-shadow: 0 8px 24px -6px rgba(67, 216, 229, 0.5);" onclick="closeExitIntent(); document.getElementById('_form_8_submit').scrollIntoView({behavior: 'smooth'})">
-                        👉 Ja, ik wil me inschrijven!
+                <h3 class="modal-title" style="font-size: 1.8rem; margin-bottom: 10px;">Wacht even... voordat je gaat</h3>
+                <p class="modal-text" style="font-size: 1.05rem; margin-bottom: 20px;">Als je deze zomer eindelijk strakker wilt staan, dan wil je deze gratis live call niet missen. Laat hieronder je naam en e-mail achter en reserveer direct je plek.</p>
+                
+                <form class="optin-form" action="https://defitnesscoach.activehosted.com/proc.php" method="POST" style="width: 100%;">
+                    <input type="hidden" name="u" value="8" />
+                    <input type="hidden" name="f" value="8" />
+                    <input type="hidden" name="s" />
+                    <input type="hidden" name="c" value="0" />
+                    <input type="hidden" name="m" value="0" />
+                    <input type="hidden" name="act" value="sub" />
+                    <input type="hidden" name="v" value="2" />
+                    <input type="hidden" name="or" value="9a091e8d-ec0c-4a19-a2ee-9b3ac3ea4986" />
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="text" name="firstname" placeholder="Voornaam" required style="width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="email" name="email" placeholder="E-mailadres" required style="width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="tel" name="phone" placeholder="Telefoonnummer" required pattern="[0-9+\s\-()]{8,}" style="width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem;">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%; box-shadow: 0 8px 24px -6px rgba(67, 216, 229, 0.5);">
+                        Reserveer gratis mijn plek
                     </button>
-                    <a href="javascript:void(0)" onclick="closeExitIntent()" style="display: block; margin-top: 15px; color: var(--text-muted); text-decoration: underline; font-size: 0.95rem; text-align: center;">Nee bedankt, ik sla over</a>
-                </div>
+                    <p style="font-size: 0.85rem; margin-top: 15px; color: var(--text-muted); text-align: center;">Gratis &bull; Geen verplichtingen &bull; Inclusief 2 bonussen</p>
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- STICKY MOBILE CTA -->
+    <div class="sticky-mobile-cta">
+        <button onclick="openEnrollModal()" class="btn btn-primary btn-large" style="width: 100%; padding: 15px; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(67,216,229,0.4);">
+            Gratis meedoen
+        </button>
+    </div>
+
     <!-- Scripts -->
     <script>
-        function downloadICS(e) {
-            e.preventDefault();
-            const icsData = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//De Fitnesscoach//NONSGML v1.0//EN
-BEGIN:VEVENT
-UID:${new Date().getTime()}@defitnesscoach.nl
-DTSTAMP:20260408T000000Z
-DTSTART:20260507T170000Z
-DTEND:20260507T183000Z
-SUMMARY:Zomer Droog Live Call
-DESCRIPTION:De Zomer Droog Live Call gaat beginnen! Klik op de Zoom-link om in te loggen.\\n\\nZoom Link:\\nhttps://us06web.zoom.us/j/85944847617?pwd=n29tqgEjr8IzfTkz8Zay91O4bbTJte.1
-LOCATION:Zoom
-END:VEVENT
-END:VCALENDAR`;
-
-            const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'live-call-fitnesscoach.ics';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
+        // Modal logic
+        function openEnrollModal() {
+            document.getElementById('enroll-modal').classList.add('show');
         }
+        function closeEnrollModal() {
+            document.getElementById('enroll-modal').classList.remove('show');
+        }
+        
+        // Exit Intent Modal variables & functions
+        let hasShownExitIntent = false;
+        
+        function closeExitIntent() {
+            document.getElementById('exit-intent-modal').classList.add('hidden');
+        }
+
+        // Trigger on mouse leave (desktop only — mobile heeft geen betrouwbare exit-intent signal)
+        document.addEventListener("mouseleave", (e) => {
+            if (e.clientY <= 0 && !hasShownExitIntent) {
+                document.getElementById('exit-intent-modal').classList.remove('hidden');
+                hasShownExitIntent = true;
+            }
+        });
+
+        // Countdown Timer Logic
+        const targetDate = new Date('2026-05-07T19:00:00').getTime();
+        
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdownBanner').innerHTML = '<div style="font-size:1.5rem; font-weight:800; color:#e11d48;">De live call is gestart!</div>';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('cd-days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('cd-hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('cd-mins').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('cd-secs').innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
     </script>
-    <script src="https://zomerdroog-webinar.vercel.app/form.js"></script>
-    <script type="module" src="https://zomerdroog-webinar.vercel.app/boosters.js"></script>
 </body>
 </html>
