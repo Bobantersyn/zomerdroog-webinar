@@ -8,23 +8,37 @@
         // When the iframe loads, if submitted is true, it means the form was natively submitted.
         iframe.onload = function() {
             if(submitted) {
-                // Toon het custom modal
+                console.log('[form.js] AC submit voltooid — iframe.onload getriggerd');
+
+                // Reset alle opt-in formulieren
+                forms.forEach(function(f) { f.reset(); });
+
+                // Sluit eventueel openstaande opt-in / exit-intent modals
+                var enrollModal = document.getElementById('enroll-modal');
+                if (enrollModal) enrollModal.classList.remove('show');
+                var exitModal = document.getElementById('exit-intent-modal');
+                if (exitModal) exitModal.classList.add('hidden');
+
+                // Toon de success-modal en lock body-scroll
                 var modal = document.getElementById('success-modal');
                 if(modal) {
                     modal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
                 }
-                
+
                 // Herstel de button
                 if (currentSubmitButton) {
                     currentSubmitButton.disabled = false;
                     currentSubmitButton.classList.remove('processing');
-                    currentSubmitButton.innerHTML = 'Reserveer nu mijn gratis plek <i class="fa-solid fa-arrow-right" style="font-size: 0.9em; margin-left: 5px;"></i>';
+                    currentSubmitButton.innerHTML = 'Ja, ik wil gratis meedoen';
                 }
-                
+
                 // FACEBOOK LEAD EVENT TRIGGER
                 if (typeof fbq === 'function') {
                     fbq('track', 'Lead');
                 }
+
+                submitted = false;
             }
         };
     }
