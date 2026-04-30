@@ -689,6 +689,21 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
 - **Status:** voltooid
 - **Resultaat:** Wrapper omgezet van `width: 60px; box-sizing: border-box (impliciet)` naar `width: 56px; box-sizing: content-box` ([index.html:161](index.html#L161)). Met content-box wordt de 2px border buiten de 56x56 getekend, totale visuele breedte 60x60 — identiek aan andere imgs (die met border-box render: 60x60 incl 2px border = 56x56 content + 2px border).
 - **Notes voor opvolger:** Zou Ser's cirkel in een browser nog steeds afwijken: alternatief is alle 6 cards omzetten naar dezelfde wrapper-pattern voor 100% rendering-pariteit, of `outline` i.p.v. `border` gebruiken zodat box-model niets meeneemt.
+
+### Entry 35
+- **ID:** 35
+- **Start:** 2026-04-30
+- **Einde:** 2026-04-30
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** About-coach foto — content-type mismatch fix na Vercel deploy
+- **Bestand(en):** `about-coach.png` → `about-coach.jpg` (rename), `index.html`
+- **Briefing:** Bob meldt na de Vercel-deploy een gebroken-image-icoon ("?") in de about-sectie waar de coach-foto hoort.
+- **Aanleiding:** `file about-coach.png` toonde aan dat het bestand een JPEG is, geen PNG. Localhost (Python http.server) is laks met content-type, Vercel's CDN strenger. Curl gaf 200 maar de browser kon de mismatch niet renderen.
+- **Doel:** Bestand hernoemen naar correcte extensie `.jpg`, HTML img-src updaten, redeployen.
+- **Status:** voltooid (nog te pushen)
+- **Resultaat:** `git mv about-coach.png about-coach.jpg`. [index.html:290](index.html#L290) `src` aangepast naar `about-coach.jpg`. Wacht op commit + push.
+- **Notes voor opvolger:** Andere assets in de repo controleren of extensie matchet met inhoud. Bv. `Tekst Reviews/profile_*.png` — als die ook eigenlijk JPEGs zijn, kunnen ze nu (toevallig) wel werken maar geven later issues op andere CDNs.
 - **Bevindingen code-zijde:**
   - Iframe aanwezig: `index.html:72` (`<iframe name="hidden_iframe" id="hidden_iframe">`).
   - 3 opt-in formulieren posten naar `https://defitnesscoach.activehosted.com/proc.php` (regel 81, 349, 400) met `u=8`, `f=8`, `act=sub`, `or=9a091e8d-...`.
