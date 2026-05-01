@@ -895,3 +895,23 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
   - `.cal-btn` kreeg ook `justify-content: center` toegevoegd voor desktop én mobiel zodat de inhoud netjes gecentreerd is binnen de gelijkmatig-verdeelde flex-kinderen.
   - Effect: Google / Apple / Outlook staan nu op één rij op mobiel, gelijke breedte, gecentreerde icon+label.
 - **Notes voor opvolger:** Breakpoint 600px gekozen ipv de 768px van de modal omdat de 3-knoppen tot ~480px nog comfortabel passen — als knoppen op een groter mobile (bijv. iPad mini portrait) ineens te krap worden, breakpoint verhogen naar 768px. Geen JS-versie/cache-buster nodig: dit is puur CSS en `style.css` wordt al absoluut van Vercel geladen met eigen versioning.
+
+### Entry 44
+- **ID:** 44
+- **Start:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** Bedankt-modal welkomst-video — absolute URL ipv relatief pad
+- **Bestand(en):** `index.html`
+- **Briefing:** Bob: "video op de pop up doet het nog steeds niet".
+- **Aanleiding:** `<source src="welkom.mp4">` is relatief. Op `defitnesscoach.nl/livecallzomerdroog` resolveert dat naar `defitnesscoach.nl/welkom.mp4` → bestaat daar niet (curl bevestigd: 000/SSL-fail). Op `zomerdroog-webinar.vercel.app/welkom.mp4` levert curl 200. Identiek root-cause als Entry 42 (form.js) en Entry 41 (style.css). De fallback-link `<a href="welkom.mp4">` heeft dezelfde fout.
+- **Doel:** Beide `welkom.mp4` references in de video-tag absoluut maken naar `https://zomerdroog-webinar.vercel.app/welkom.mp4`.
+- **Status:** voltooid
+- **Einde:** 2026-05-01
+- **Resultaat:**
+  - [index.html:504](index.html#L504) `<source src="welkom.mp4">` → `<source src="https://zomerdroog-webinar.vercel.app/welkom.mp4">`
+  - [index.html:505](index.html#L505) fallback `<a href="welkom.mp4">` → `<a href="https://zomerdroog-webinar.vercel.app/welkom.mp4">`
+- **Notes voor opvolger:**
+  - Patroon nu compleet consistent: `style.css`, `form.js` én `welkom.mp4` worden allemaal absoluut van `zomerdroog-webinar.vercel.app` geladen. Alle assets centraal daar.
+  - Als Bob nieuwe assets toevoegt (bijv. extra video, afbeelding) en de pagina ook op een ander hostingsdomein draait: gebruik altijd absolute URL naar Vercel om dit klassieke pad-probleem te vermijden.
+  - `welkom.mp4` zelf onveranderd op Vercel (geen cache-buster nodig — andere bestandsnaam zou pas nodig zijn als Bob een nieuwe video upload met dezelfde naam).
