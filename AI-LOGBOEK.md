@@ -704,6 +704,53 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
 - **Status:** voltooid (nog te pushen)
 - **Resultaat:** `git mv about-coach.png about-coach.jpg`. [index.html:290](index.html#L290) `src` aangepast naar `about-coach.jpg`. Wacht op commit + push.
 - **Notes voor opvolger:** Andere assets in de repo controleren of extensie matchet met inhoud. Bv. `Tekst Reviews/profile_*.png` — als die ook eigenlijk JPEGs zijn, kunnen ze nu (toevallig) wel werken maar geven later issues op andere CDNs.
+
+### Entry 36
+- **ID:** 36
+- **Start:** 2026-05-01
+- **Einde:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gecreëerd
+- **Onderdeel:** E-book covers — nieuwe SVG-covers met titels die matchen met de copy
+- **Bestand(en):** `cover-calorie-cheat-sheet.svg` (nieuw), `cover-zomerdroog-blueprint.svg` (nieuw), `style.css`
+- **Briefing:** Bob: "Je ziet bij de ebook sectie andere namen staan dan bij de ebook zelf kan jij 2 voorkantjes maken voor me voor de ebooks maken met die namen de calorie cheat sheet en de 10 dagen zomerdroog blueprint".
+- **Aanleiding:** Inconsistentie: copy ([index.html:253-254](index.html#L253-L254)) noemt "De Calorie Cheat Sheet" en "De 10-Dagen Zomerdroog Blueprint", maar de bestaande cover-PNG's (`cover-calorieen.png`, `cover-formule.png`) tonen oude/andere namen. Download-knoppen in success-modal ([index.html:543-544](index.html#L543-L544)) gebruiken óók nog de oude namen ("E-book Calorieën", "E-book De Formule").
+- **Doel:** Twee nieuwe cover-images maken met de juiste titels en CSS-references updaten zodat de e-book-stack ([index.html:259-260](index.html#L259-L260)) de nieuwe covers toont.
+- **Status:** voltooid
+- **Resultaat:**
+  - SVG-formaat gekozen (geen image-generation tool beschikbaar in deze sessie). Vector = scherp op alle resoluties, klein bestand.
+  - `cover-calorie-cheat-sheet.svg` (240×340 viewport): donker navy gradient (#1e293b→#0f172a), branding "DE FITNESSCOACH" + cyan divider, titel "CALORIE / CHEAT / SHEET" (CHEAT in cyan-accent), ondertitel "Eindelijk snappen hoe het werkt", cyan badge "GRATIS E-BOOK".
+  - `cover-zomerdroog-blueprint.svg` (zelfde stijl/structuur): titel "10-DAGEN / ZOMERDROOG / BLUEPRINT" (ZOMERDROOG in cyan), ondertitel "Sneller resultaat in 10 dagen".
+  - [style.css:399-413](style.css#L399-L413) `cover-1` en `cover-2` `background: url(...)` gewijzigd van absolute Vercel-URLs naar relatieve SVG-paths. Hierdoor werkt het lokaal en op Vercel.
+  - Lokaal getest via curl: beide SVG's returnen 200.
+- **Notes voor opvolger:**
+  - **Font-fallback:** SVG gebruikt `font-family: 'Outfit', system-ui, sans-serif`. Als background-image krijgen SVGs geen toegang tot pagina-webfonts; browser fallt terug op systeem sans-serif. Acceptabel maar niet 100% on-brand. Voor pixel-perfecte Outfit-rendering: covers omzetten naar inline SVG in HTML.
+  - **Download-knoppen nog inconsistent:** [index.html:543-544](index.html#L543-L544) heten nog "E-book Calorieën" / "E-book De Formule". Vraag Bob of hij deze ook wil bijtrekken naar "Calorie Cheat Sheet" / "10-Dagen Zomerdroog Blueprint".
+  - **Drive-PDFs:** de PDF-bestanden achter de download-links hebben mogelijk ook nog oude titels intern. Bob moet zelf in Drive de PDFs hernoemen of de inhoud aanpassen voor volledige consistentie.
+  - **Oude PNG-files** (`cover-calorieen.png`, `cover-formule.png`) staan nog in de repo maar worden niet meer gerefereerd. Eventueel later verwijderen.
+
+### Entry 37
+- **ID:** 37
+- **Start:** 2026-05-01
+- **Einde:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** Asset-paden in `index.html` terug naar absoluut Vercel-URL (productie-fix)
+- **Bestand(en):** `index.html`
+- **Briefing:** Bob meldt op live URL `defitnesscoach.nl/livecallzomerdroog`: alle review-foto's én coach-foto zijn broken images.
+- **Aanleiding:** `defitnesscoach.nl` is **een ander Vercel-project** (geen alias) dat alleen de HTML proxy't van `zomerdroog-webinar.vercel.app`. Relatieve paden (`Tekst Reviews/...`, `about-coach.jpg`) lossen op tegen `defitnesscoach.nl/...` waar de assets niet bestaan → 404. Op `zomerdroog-webinar.vercel.app/...` bestaan ze wél (curl 200 bevestigd).
+- **Doel:** Alle img-srcs absoluut maken naar `https://zomerdroog-webinar.vercel.app/...` zodat ze op beide hosts werken. Dit reverteert deels Entry 32's relatief-pad-keuze (die was bedoeld voor lokale-dev-ervaring) — productie-werking heeft prioriteit.
+- **Status:** voltooid (gedeployed)
+- **Resultaat:** 7 img-srcs gewijzigd in `index.html`:
+  - 3× blok 1 (Ser/Ali/Bob)
+  - 3× blok 2 (Muhammed/Emir/Ozan, profile_1/2/3.png)
+  - About-coach foto
+  - Spaties in mappad ge-URL-encodeerd naar `Tekst%20Reviews`.
+  - Twee uncommitted SVG-covers (`cover-calorie-cheat-sheet.svg`, `cover-zomerdroog-blueprint.svg`) en `style.css`-update worden in dezelfde commit meegenomen — anders zijn de e-book covers ook 404 op live.
+- **Notes voor opvolger:**
+  - Lokale `python -m http.server` werkt nog steeds voor de pagina maar IMG's worden vanaf Vercel geladen. Bewust geaccepteerd voor productie-functionaliteit. Voor offline werken: zet ze tijdelijk relatief in een lokale branch.
+  - Alle asset-references in HTML zijn nu absoluut + alle CSS-asset-references blijven relatief (CSS wordt zelf vanaf zomerdroog-webinar.vercel.app geladen, dus relatieve URLs in CSS resolveren correct).
+  - Bob moet checken: waarom is `defitnesscoach.nl/livecallzomerdroog` een aparte deploy/proxy en niet een Vercel domain alias? Een echte alias zou alle assets correct serveren. Dit is een config-discussie voor de Vercel-instellingen van het `defitnesscoach.nl`-project.
 - **Bevindingen code-zijde:**
   - Iframe aanwezig: `index.html:72` (`<iframe name="hidden_iframe" id="hidden_iframe">`).
   - 3 opt-in formulieren posten naar `https://defitnesscoach.activehosted.com/proc.php` (regel 81, 349, 400) met `u=8`, `f=8`, `act=sub`, `or=9a091e8d-...`.
