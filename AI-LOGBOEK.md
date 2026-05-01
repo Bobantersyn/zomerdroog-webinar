@@ -843,6 +843,24 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
   - **AC's redirect-form** (`defitnesscoach.activehosted.com`) wordt nu nooit meer geladen. Voorheen was dat de fallback bij iframe-issues; nu zit alle UX in onze pagina.
   - **Hidden iframe** in HTML is overbodig geworden maar laten staan voor backward-safety. Eventueel later weghalen.
   - **Test:** input `0612345678` → vóór POST wordt het `+31612345678` → AC accepteert → success-modal verschijnt. Werkt op desktop én mobiel.
+
+### Entry 42
+- **ID:** 42
+- **Start:** 2026-05-01
+- **Einde:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** form.js script absoluut laden vanaf `zomerdroog-webinar.vercel.app` (kritieke productie-fix)
+- **Bestand(en):** `index.html`
+- **Briefing:** Bob: "ik vul mijn gegevens maar hij doet het niet. Ik klik ja ik wil mee doen maar hij doet niks".
+- **Aanleiding:** form.js was geladen via `./form.js` (relatief pad). Op `defitnesscoach.nl/livecallzomerdroog` resolveert dit naar `defitnesscoach.nl/form.js` → 404 (curl bevestigd). De JS werd dus nooit geladen → geen submit-handler geregistreerd → niets gebeurt bij klikken op de submit-button. Op `zomerdroog-webinar.vercel.app/livecallzomerdroog` werkt het wel omdat daar form.js wél beschikbaar is op het zelfde domein.
+- **Doel:** Script-tag absoluut maken naar `https://zomerdroog-webinar.vercel.app/form.js?v=3.0.0` (matched de patroon van `style.css`). Cache-buster `v=3.0.0` forceert nieuwe download — zo komt de Entry 41 fetch-versie zeker bij gebruikers terecht en niet een gecachte oude versie.
+- **Status:** voltooid (gedeployed)
+- **Resultaat:** [index.html:581](index.html#L581) `<script src="./form.js">` → `<script src="https://zomerdroog-webinar.vercel.app/form.js?v=3.0.0">`. Vanaf nu laadt elk subdomein/proxy-domein dat de HTML host de form.js van de juiste plek.
+- **Notes voor opvolger:**
+  - Cache-buster bumpen bij elke nieuwe form.js wijziging zodat browsers niet de oude versie aanhouden. Voorbeeld: `v=3.0.1` voor volgende update.
+  - Patroon nu consistent: `style.css` én `form.js` worden absoluut van `zomerdroog-webinar.vercel.app` geladen. Alle assets centraal daar.
+  - Welke andere `defitnesscoach.nl` pagina's mogelijk dezelfde form.js gebruiken — als Bob deze form ergens anders embed/embed't, doet die nu ook automatisch mee aan de nieuwe versie.
 - **Bevindingen code-zijde:**
   - Iframe aanwezig: `index.html:72` (`<iframe name="hidden_iframe" id="hidden_iframe">`).
   - 3 opt-in formulieren posten naar `https://defitnesscoach.activehosted.com/proc.php` (regel 81, 349, 400) met `u=8`, `f=8`, `act=sub`, `or=9a091e8d-...`.
