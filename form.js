@@ -56,16 +56,18 @@
         }
 
         // --- Mailblue formatterings-fix voor NL telefoonnummers ---
+        // AC/Mailblue verwacht 316xxxxxxxx (geen leading 0, geen +).
         if (phoneField) {
             var phone = phoneField.value;
-            var cleanPhone = phone.replace(/[\s-]/g, '');
-            if (cleanPhone.startsWith('06')) {
-                cleanPhone = '+31' + cleanPhone.substring(1);
-                phoneField.value = cleanPhone;
+            var cleanPhone = phone.replace(/[\s\-()+]/g, '');
+            if (cleanPhone.startsWith('0031')) {
+                cleanPhone = cleanPhone.substring(2);
+            } else if (cleanPhone.startsWith('06')) {
+                cleanPhone = '31' + cleanPhone.substring(1);
             } else if (cleanPhone.startsWith('6') && cleanPhone.length === 9) {
-                cleanPhone = '+31' + cleanPhone;
-                phoneField.value = cleanPhone;
+                cleanPhone = '31' + cleanPhone;
             }
+            phoneField.value = cleanPhone;
         }
 
         currentSubmitButton = form.querySelector('button[type="submit"]') || form.querySelector('button');

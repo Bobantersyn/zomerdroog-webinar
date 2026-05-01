@@ -788,6 +788,32 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
 - **Status:** voltooid (gedeployed)
 - **Resultaat:** 3 forms in [index.html](index.html) gewijzigd ([:81](index.html#L81), [:351](index.html#L351), [:402](index.html#L402)) — `target="hidden_iframe"` nu intrinsiek deel van de form. Verifieerd: 3 forms hebben nu `target="hidden_iframe" action="..."`.
 - **Notes voor opvolger:** Mocht popup-modal nog steeds niet verschijnen op mobiel: de `iframe.onload` callback in form.js firet niet betrouwbaar in alle Safari Mobile versies wanneer cross-origin POST wordt afgehandeld. Alternatief is na submit een `setTimeout` van 1500ms zetten die de success-modal toont ongeacht iframe.onload — minder betrouwbaar maar werkt overal. Eerst test op live mobiel afwachten.
+
+### Entry 40
+- **ID:** 40
+- **Start:** 2026-05-01
+- **Einde:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** Telefoon-format fix — AC/Mailblue verwacht `316xxxxxxxx` (zonder `+` of leading `0`)
+- **Bestand(en):** `form.js`, `index.html`
+- **Briefing:** Bob: "ja ik doe 06 maar hij wilt dat ik 316 doet en geeft foutmelding dat de telefoonnummer niet correct is".
+- **Aanleiding:** AC/Mailblue valideert het phone-veld strict op format `316xxxxxxxx`. De vorige form.js-conversie maakte `+316xxxxxxxx` (met `+`) — AC weigert dat. Daarbij dwong het `pattern="[0-9+\s\-()]{8,}"` op de input client-side validatie die conflicten kon geven met autocorrect/autofill op mobiel.
+- **Doel:**
+  - form.js conversie omzetten naar correct AC-format: 06xxx / +316xxx / 0031xxx → `316xxx`.
+  - `pattern`-attribuut verwijderen van alle 3 phone-inputs zodat browser-validatie niet in de weg zit.
+- **Status:** voltooid (gedeployed)
+- **Resultaat:**
+  - [form.js:58-71](form.js#L58-L71) Mailblue-conversie herschreven:
+    - Strip eerst whitespace, `-`, `(`, `)`, `+` uit input.
+    - `0031xxx` → `31xxx` (drop leading `00`).
+    - `06xxx` → `316xxx` (vervang leading `0` door `31`).
+    - Standalone `6xxxxxxxx` (9 digits) → `316xxxxxxxx` (prepend `31`).
+    - Geen `+` meer, geen leading `0`.
+  - [index.html:98](index.html#L98), [:369](index.html#L369), [:418](index.html#L418): `pattern="[0-9+\s\-()]{8,}"` verwijderd. `type="tel"` blijft staan voor mobiele numeric keyboard.
+- **Notes voor opvolger:**
+  - **Test scenarios om te checken na deploy:** input `06xxxxxxxx` → AC ontvangt `316xxxxxxxx` ✓; input `+31 6 xxx xxx xx` → AC ontvangt `316xxxxxxxx` ✓; input `0031 6 xxx xxx xx` → idem ✓; international zonder NL-prefix valt buiten conversie en gaat as-is door (mogelijk faalt AC dan, maar dat is een edge-case).
+  - Mocht AC alsnog klagen: het kan zijn dat het phone-veld in AC's account een aangescherpte validation rule heeft. Dan moet Bob in AC dashboard → Custom Fields → "phone" → validation aanpassen.
 - **Bevindingen code-zijde:**
   - Iframe aanwezig: `index.html:72` (`<iframe name="hidden_iframe" id="hidden_iframe">`).
   - 3 opt-in formulieren posten naar `https://defitnesscoach.activehosted.com/proc.php` (regel 81, 349, 400) met `u=8`, `f=8`, `act=sub`, `or=9a091e8d-...`.
