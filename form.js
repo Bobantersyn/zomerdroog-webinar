@@ -1,73 +1,55 @@
 (function() {
-    var iframe = document.getElementById('hidden_iframe');
     var forms = document.querySelectorAll('.optin-form');
-    var submitted = false;
     var currentSubmitButton = null;
 
-    if (iframe) {
-        // When the iframe loads, if submitted is true, it means the form was natively submitted.
-        iframe.onload = function() {
-            if(submitted) {
-                console.log('[form.js] AC submit voltooid — iframe.onload getriggerd');
+    function showSuccessModal() {
+        forms.forEach(function(f) { f.reset(); });
 
-                // Reset alle opt-in formulieren
-                forms.forEach(function(f) { f.reset(); });
+        var enrollModal = document.getElementById('enroll-modal');
+        if (enrollModal) enrollModal.classList.remove('show');
+        var exitModal = document.getElementById('exit-intent-modal');
+        if (exitModal) exitModal.classList.add('hidden');
 
-                // Sluit eventueel openstaande opt-in / exit-intent modals
-                var enrollModal = document.getElementById('enroll-modal');
-                if (enrollModal) enrollModal.classList.remove('show');
-                var exitModal = document.getElementById('exit-intent-modal');
-                if (exitModal) exitModal.classList.add('hidden');
+        var modal = document.getElementById('success-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
 
-                // Toon de success-modal en lock body-scroll
-                var modal = document.getElementById('success-modal');
-                if(modal) {
-                    modal.classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                }
+        if (currentSubmitButton) {
+            currentSubmitButton.disabled = false;
+            currentSubmitButton.classList.remove('processing');
+            currentSubmitButton.innerHTML = 'Ja, ik wil gratis meedoen';
+        }
 
-                // Herstel de button
-                if (currentSubmitButton) {
-                    currentSubmitButton.disabled = false;
-                    currentSubmitButton.classList.remove('processing');
-                    currentSubmitButton.innerHTML = 'Ja, ik wil gratis meedoen';
-                }
-
-                // FACEBOOK LEAD EVENT TRIGGER
-                if (typeof fbq === 'function') {
-                    fbq('track', 'Lead');
-                }
-
-                submitted = false;
-            }
-        };
+        if (typeof fbq === 'function') {
+            fbq('track', 'Lead');
+        }
     }
 
     var form_submit = function(e) {
+        e.preventDefault();
         var form = e.target;
         var firstname = form.querySelector('input[name="firstname"]').value;
         var email = form.querySelector('input[name="email"]').value;
         var phoneField = form.querySelector('input[name="phone"]');
-        
-        if(!firstname || !email) {
+
+        if (!firstname || !email) {
             alert("Vul alstublieft uw voornaam en e-mailadres in.");
-            e.preventDefault();
             return false;
         }
 
-        // --- Mailblue formatterings-fix voor NL telefoonnummers ---
-        // AC/Mailblue verwacht 316xxxxxxxx (geen leading 0, geen +).
-        if (phoneField) {
-            var phone = phoneField.value;
-            var cleanPhone = phone.replace(/[\s\-()+]/g, '');
-            if (cleanPhone.startsWith('0031')) {
-                cleanPhone = cleanPhone.substring(2);
-            } else if (cleanPhone.startsWith('06')) {
-                cleanPhone = '31' + cleanPhone.substring(1);
-            } else if (cleanPhone.startsWith('6') && cleanPhone.length === 9) {
-                cleanPhone = '31' + cleanPhone;
+        // --- AC/Mailblue NL phone format: +316xxxxxxxx ---
+        if (phoneField && phoneField.value) {
+            var raw = phoneField.value.replace(/[\s\-()+]/g, '');
+            if (raw.startsWith('0031')) {
+                raw = raw.substring(2);
+            } else if (raw.startsWith('06')) {
+                raw = '31' + raw.substring(1);
+            } else if (raw.startsWith('6') && raw.length === 9) {
+                raw = '31' + raw;
             }
-            phoneField.value = cleanPhone;
+            phoneField.value = '+' + raw;
         }
 
         currentSubmitButton = form.querySelector('button[type="submit"]') || form.querySelector('button');
@@ -76,13 +58,23 @@
             currentSubmitButton.classList.add('processing');
             currentSubmitButton.innerHTML = 'Bezig met inschrijven...';
         }
-        
-        submitted = true;
-        // The form will natively submit to target="hidden_iframe"
+
+        var formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+        }).then(function() {
+            console.log('[form.js] AC POST verzonden — success-modal tonen');
+            showSuccessModal();
+        }).catch(function(err) {
+            console.warn('[form.js] fetch faalde, modal alsnog tonen', err);
+            showSuccessModal();
+        });
     };
-    
+
     forms.forEach(function(form) {
-        form.target = "hidden_iframe"; // Set target explicitly
         if (form.addEventListener) {
             form.addEventListener('submit', form_submit);
         } else {

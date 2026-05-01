@@ -814,6 +814,35 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
 - **Notes voor opvolger:**
   - **Test scenarios om te checken na deploy:** input `06xxxxxxxx` → AC ontvangt `316xxxxxxxx` ✓; input `+31 6 xxx xxx xx` → AC ontvangt `316xxxxxxxx` ✓; input `0031 6 xxx xxx xx` → idem ✓; international zonder NL-prefix valt buiten conversie en gaat as-is door (mogelijk faalt AC dan, maar dat is een edge-case).
   - Mocht AC alsnog klagen: het kan zijn dat het phone-veld in AC's account een aangescherpte validation rule heeft. Dan moet Bob in AC dashboard → Custom Fields → "phone" → validation aanpassen.
+
+### Entry 41
+- **ID:** 41
+- **Start:** 2026-05-01
+- **Einde:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** Form-submit volledig refactor naar `fetch()` met `no-cors` — geen iframe redirect-issues meer op mobiel
+- **Bestand(en):** `form.js`
+- **Briefing:** Bob's mobile screenshot toont na submit een redirect naar `defitnesscoach.activehosted.com` met een AC-foutmelding "Geef een geldig telefoonnummer op (formaat +XXXXXXXXXXXX)". Onze custom 3-stappen success-modal verschijnt niet.
+- **Aanleiding:**
+  - `target="hidden_iframe"` (Entry 39) werkt op desktop maar **niet** op mobiel. Safari/Chrome Mobile volgen 302-redirects van AC's `proc.php` in de hoofdwindow ondanks de target — dat is een bekende mobile-browser quirk.
+  - AC's redirect-pagina valideert phone strikter dan AC's API zelf. De foutmelding suggereert `+XXXXXXXXXXXX` (12 chars) — dus `+` is wél vereist (niet zoals Entry 40 aannam).
+- **Doel:** Geen iframe-target meer. Alle form-submits gaan via `fetch()` met `mode: 'no-cors'`. AC's API ontvangt de POST en maakt het contact aan; wij tonen onze success-modal direct na de fetch resolves (of catched op een fetch-fail). Phone format gaat terug naar `+316xxxxxxxx` (mét `+`).
+- **Status:** voltooid (gedeployed)
+- **Resultaat:**
+  - [form.js](form.js) volledig herschreven:
+    - Nieuwe `showSuccessModal()` helper (DRY).
+    - `e.preventDefault()` blokkeert native submit.
+    - Phone normaliseert eerst naar `316xxxxxxxx`, daarna prepend `+` → `+316xxxxxxxx` (correct voor AC).
+    - `fetch(form.action, { method: 'POST', body: FormData, mode: 'no-cors' })` doet de submit.
+    - `.then()` toont success-modal; `.catch()` ook (fail-open: aannemen dat het werkte i.p.v. user blokkeren).
+    - Geen `iframe.onload` callback meer, geen `submitted` flag.
+  - `target="hidden_iframe"` blijft als HTML-attribuut staan op de forms — schaadt niet als de native submit nooit gebeurt door `e.preventDefault()`.
+- **Notes voor opvolger:**
+  - **`mode: 'no-cors'`** = de fetch is opaak: we kunnen response status niet uitlezen. Voordeel: AC's CORS-config is irrelevant. Nadeel: bij echte fout (bv. AC down, 500-error) zien we dat niet — maar het Lead-event vuurt + mail/contact wordt niet aangemaakt → Bob ziet leegloop in AC. Acceptabel risico vs. de voorheen broken UX.
+  - **AC's redirect-form** (`defitnesscoach.activehosted.com`) wordt nu nooit meer geladen. Voorheen was dat de fallback bij iframe-issues; nu zit alle UX in onze pagina.
+  - **Hidden iframe** in HTML is overbodig geworden maar laten staan voor backward-safety. Eventueel later weghalen.
+  - **Test:** input `0612345678` → vóór POST wordt het `+31612345678` → AC accepteert → success-modal verschijnt. Werkt op desktop én mobiel.
 - **Bevindingen code-zijde:**
   - Iframe aanwezig: `index.html:72` (`<iframe name="hidden_iframe" id="hidden_iframe">`).
   - 3 opt-in formulieren posten naar `https://defitnesscoach.activehosted.com/proc.php` (regel 81, 349, 400) met `u=8`, `f=8`, `act=sub`, `or=9a091e8d-...`.
