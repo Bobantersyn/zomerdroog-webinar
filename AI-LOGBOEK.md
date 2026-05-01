@@ -751,6 +751,28 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
   - Lokale `python -m http.server` werkt nog steeds voor de pagina maar IMG's worden vanaf Vercel geladen. Bewust geaccepteerd voor productie-functionaliteit. Voor offline werken: zet ze tijdelijk relatief in een lokale branch.
   - Alle asset-references in HTML zijn nu absoluut + alle CSS-asset-references blijven relatief (CSS wordt zelf vanaf zomerdroog-webinar.vercel.app geladen, dus relatieve URLs in CSS resolveren correct).
   - Bob moet checken: waarom is `defitnesscoach.nl/livecallzomerdroog` een aparte deploy/proxy en niet een Vercel domain alias? Een echte alias zou alle assets correct serveren. Dit is een config-discussie voor de Vercel-instellingen van het `defitnesscoach.nl`-project.
+
+### Entry 38
+- **ID:** 38
+- **Start:** 2026-05-01
+- **Einde:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** Mobile fixes — oude e-book covers terug + responsive hero-headline
+- **Bestand(en):** `style.css`, `index.html`
+- **Briefing:** Bob (na mobile-screenshot review): "Ik wil de oude covers weer terug van ebooks. En de hoofdtitel is te groot? Iets kleiner".
+- **Aanleiding:**
+  - Bob vindt de SVG-covers (Entry 36) niet wat hij wil — terug naar `cover-calorieen.png` / `cover-formule.png`.
+  - Hero-h1 had inline `font-size: 3.5rem` die de mobile media-query (`@media (max-width: 480px) { .headline { font-size: 2.75rem; } }`) overschreef → titel veel te groot op mobiel.
+- **Doel:** PNG-covers herstellen, h1 responsive maken zonder de mobile media-query op te volgen want dat conflicteert met inline style.
+- **Status:** voltooid (gedeployed)
+- **Resultaat:**
+  - [style.css:399-413](style.css#L399-L413) `.ebook.cover-1` en `.ebook.cover-2` terug op `https://zomerdroog-webinar.vercel.app/cover-calorieen.png` en `cover-formule.png` (absolute Vercel URLs zoals vóór Entry 36).
+  - [index.html:113](index.html#L113) `font-size: 3.5rem` vervangen door `font-size: clamp(2rem, 6vw, 3.5rem)`. Op brede schermen 3.5rem (max 56px), op smal scherm 6vw (bv. 22.5px op 375px wide), met 2rem (32px) als ondergrens. Schaalt vloeiend, geen media-query nodig.
+- **Notes voor opvolger:**
+  - SVG-covers (`cover-calorie-cheat-sheet.svg` en `cover-zomerdroog-blueprint.svg`) blijven in de repo maar worden niet meer gebruikt. Verwijderen kan later (samen met oude PNG-files). Voor nu houden we ze beschikbaar als alternatief.
+  - Andere h1/section-titles op de pagina hebben mogelijk hetzelfde inline-vs-media-query conflict. Bij volgende mobile-pas: alle inline `font-size` op `clamp(...)` zetten, of inline weghalen en in CSS centraal regelen.
+  - Subheadline ([index.html:114](index.html#L114)) heeft inline `font-size: 1.2rem` — past al goed op mobile, maar zelfde patroon overwegen voor consistentie.
 - **Bevindingen code-zijde:**
   - Iframe aanwezig: `index.html:72` (`<iframe name="hidden_iframe" id="hidden_iframe">`).
   - 3 opt-in formulieren posten naar `https://defitnesscoach.activehosted.com/proc.php` (regel 81, 349, 400) met `u=8`, `f=8`, `act=sub`, `or=9a091e8d-...`.

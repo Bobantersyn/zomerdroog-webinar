@@ -399,7 +399,7 @@ section {
 .ebook.cover-1 {
     transform: rotateY(15deg) translateZ(20px);
     z-index: 2;
-    background: url('cover-calorie-cheat-sheet.svg') center / cover no-repeat;
+    background: url('https://zomerdroog-webinar.vercel.app/cover-calorieen.png') center / cover no-repeat;
     left: 20px;
     bottom: 20px;
 }
@@ -407,7 +407,7 @@ section {
 .ebook.cover-2 {
     transform: rotateY(10deg) translateZ(-10px);
     z-index: 1;
-    background: url('cover-zomerdroog-blueprint.svg') center / cover no-repeat;
+    background: url('https://zomerdroog-webinar.vercel.app/cover-formule.png') center / cover no-repeat;
     left: 100px;
     top: 20px;
 }
