@@ -1268,6 +1268,7 @@ section {
     font-weight: 600;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     transition: all 0.2s;
     border: 1px solid #e2e8f0;
@@ -1279,6 +1280,21 @@ section {
 
 .cal-btn:hover {
     background: #e2e8f0;
+}
+
+@media (max-width: 600px) {
+    .calendar-buttons {
+        flex-wrap: nowrap;
+        gap: 6px;
+    }
+    .cal-btn {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 10px 6px;
+        font-size: 0.85rem;
+        gap: 5px;
+        white-space: nowrap;
+    }
 }
 
 @media (max-width: 768px) {

@@ -877,3 +877,21 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
   3. AC dashboard: Forms → embed code openen → check of `u=8` en `f=8` nog kloppen.
   4. AC dashboard: Contacts → zoek op het ingevoerde e-mailadres. Echt niet aanwezig, of in "Unconfirmed"?
 - **Notes voor opvolger:** Niets in de code aanpassen totdat de Network-status van `proc.php` bekend is. Als Bob nieuwe `u`/`f` waarden uit AC haalt, moeten die op 3 plekken in `index.html` worden vervangen (regel 82-83, 351-352, 401-402).
+
+### Entry 43
+- **ID:** 43
+- **Start:** 2026-05-01 (lopend)
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast
+- **Onderdeel:** Bedankt-modal STAP 1 — agenda-knoppen (Google/Apple/Outlook) layout op mobiel
+- **Bestand(en):** `style.css`
+- **Briefing:** Bob: "video doet het en die knoppen van die agenda's zijn niet zo mooi op die manier ze moeten naast elkaar" + screenshot mobiel waarop Google+Apple op rij 1 staan en Outlook eronder.
+- **Aanleiding:** `.calendar-buttons` heeft `flex-wrap: wrap` met 10px gap en `.cal-btn` `padding: 10px 20px`. Op smalle schermen past de derde knop niet meer naast de andere twee waardoor Outlook naar de volgende rij wrapped. Visueel onevenwichtig (2+1 ipv 3 op één rij).
+- **Doel:** Drie knoppen alle op één rij krijgen op mobiel door padding/gap/font-size te verkleinen onder 768px én elke `.cal-btn` `flex: 1` te geven zodat ze de breedte gelijkmatig verdelen.
+- **Status:** voltooid
+- **Einde:** 2026-05-01
+- **Resultaat:**
+  - `style.css:1255-1305` — `.calendar-buttons` ongewijzigd op desktop, plus nieuwe `@media (max-width: 600px)` block met `flex-wrap: nowrap`, gap 6px, `.cal-btn` `flex: 1 1 0`, padding 10px 6px, font-size 0.85rem, `white-space: nowrap`, `min-width: 0`.
+  - `.cal-btn` kreeg ook `justify-content: center` toegevoegd voor desktop én mobiel zodat de inhoud netjes gecentreerd is binnen de gelijkmatig-verdeelde flex-kinderen.
+  - Effect: Google / Apple / Outlook staan nu op één rij op mobiel, gelijke breedte, gecentreerde icon+label.
+- **Notes voor opvolger:** Breakpoint 600px gekozen ipv de 768px van de modal omdat de 3-knoppen tot ~480px nog comfortabel passen — als knoppen op een groter mobile (bijv. iPad mini portrait) ineens te krap worden, breakpoint verhogen naar 768px. Geen JS-versie/cache-buster nodig: dit is puur CSS en `style.css` wordt al absoluut van Vercel geladen met eigen versioning.
