@@ -773,6 +773,21 @@ Dit document logt elke belangrijke AI-bijdrage aan het Zomerdroog Webinar projec
   - SVG-covers (`cover-calorie-cheat-sheet.svg` en `cover-zomerdroog-blueprint.svg`) blijven in de repo maar worden niet meer gebruikt. Verwijderen kan later (samen met oude PNG-files). Voor nu houden we ze beschikbaar als alternatief.
   - Andere h1/section-titles op de pagina hebben mogelijk hetzelfde inline-vs-media-query conflict. Bij volgende mobile-pas: alle inline `font-size` op `clamp(...)` zetten, of inline weghalen en in CSS centraal regelen.
   - Subheadline ([index.html:114](index.html#L114)) heeft inline `font-size: 1.2rem` — past al goed op mobile, maar zelfde patroon overwegen voor consistentie.
+
+### Entry 39
+- **ID:** 39
+- **Start:** 2026-05-01
+- **Einde:** 2026-05-01
+- **AI:** Claude Opus 4.7 (1M context) via Claude Code
+- **Type:** aangepast & gedeployed
+- **Onderdeel:** Mobile form-submit popup-fix — `target="hidden_iframe"` als HTML-attribuut
+- **Bestand(en):** `index.html`
+- **Briefing:** Bob: "op mobiel als ik formulier invul gaat naar die van active campgaine en ik zie de popup niet van de 3 stappen daarna".
+- **Aanleiding:** `target="hidden_iframe"` werd alleen gezet door [form.js:83](form.js#L83) (`form.target = "hidden_iframe"` in DOMContentLoaded). Op trage mobiele verbindingen of als Safari Mobile JS even later parsed dan dat de gebruiker submit, gaat de submit naar AC's eigen `proc.php` URL i.p.v. de hidden iframe → AC's response-pagina vervangt de hele page → success-modal verschijnt nooit.
+- **Doel:** `target="hidden_iframe"` direct als HTML-attribuut op alle 3 `<form class="optin-form">` zetten. Belt-and-suspenders: HTML doet zijn werk vóór JS, en form.js' `form.target = "hidden_iframe"` blijft als idempotente backup.
+- **Status:** voltooid (gedeployed)
+- **Resultaat:** 3 forms in [index.html](index.html) gewijzigd ([:81](index.html#L81), [:351](index.html#L351), [:402](index.html#L402)) — `target="hidden_iframe"` nu intrinsiek deel van de form. Verifieerd: 3 forms hebben nu `target="hidden_iframe" action="..."`.
+- **Notes voor opvolger:** Mocht popup-modal nog steeds niet verschijnen op mobiel: de `iframe.onload` callback in form.js firet niet betrouwbaar in alle Safari Mobile versies wanneer cross-origin POST wordt afgehandeld. Alternatief is na submit een `setTimeout` van 1500ms zetten die de success-modal toont ongeacht iframe.onload — minder betrouwbaar maar werkt overal. Eerst test op live mobiel afwachten.
 - **Bevindingen code-zijde:**
   - Iframe aanwezig: `index.html:72` (`<iframe name="hidden_iframe" id="hidden_iframe">`).
   - 3 opt-in formulieren posten naar `https://defitnesscoach.activehosted.com/proc.php` (regel 81, 349, 400) met `u=8`, `f=8`, `act=sub`, `or=9a091e8d-...`.
